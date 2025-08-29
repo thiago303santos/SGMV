@@ -1,25 +1,51 @@
-html,
 body {
-  height: 100%;
-}
+            background-color: #121212; /* fundo escuro */
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-.form-signin {
-  max-width: 330px;
-  padding: 1rem;
-}
+        .login-card {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
+        }
 
-.form-signin .form-floating:focus-within {
-  z-index: 2;
-}
+        .form-control {
+            background-color: #2b2b2b;
+            border: none;
+            color: #fff;
+        }
 
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
+        .form-control:focus {
+            background-color: #2b2b2b;
+            color: #fff;
+            box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+        }
 
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
+        body {
+            background: url('/images/bglogin.png') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: rgba(0, 0, 0, 0.75);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            margin: auto;
+            margin-top: 10%;
+            color: white;
+        }
+
+        h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
