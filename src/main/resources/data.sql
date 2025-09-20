@@ -1,0 +1,11 @@
+INSERT INTO tb_tipo_veiculo (tipo_veiculo) VALUES ('HATCH');
+INSERT INTO tb_tipo_veiculo (tipo_veiculo)  VALUES ('SEDAN');
+INSERT INTO tb_tipo_veiculo (tipo_veiculo)  VALUES ('SUV');
+INSERT INTO tb_tipo_veiculo (tipo_veiculo)  VALUES ('PICAPE');
+INSERT INTO tb_tipo_veiculo (tipo_veiculo)  VALUES ('CROSSOVER');
+INSERT INTO tb_tipo_veiculo (tipo_veiculo)  VALUES ('MINIVAN');
+INSERT INTO tb_tipo_veiculo (tipo_veiculo)  VALUES ('ESPORTIVO');
+INSERT INTO tb_tipo_veiculo (tipo_veiculo)  VALUES ('COUPE');
+INSERT INTO tb_tipo_veiculo (tipo_veiculo)  VALUES ('CONVERSIVEL');
+INSERT INTO tb_tipo_veiculo (tipo_veiculo)  VALUES ('PERUA');
+INSERT INTO tb_tipo_veiculo (tipo_veiculo)  VALUES ('MOTOCICLETA');
