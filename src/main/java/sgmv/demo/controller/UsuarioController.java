@@ -17,4 +17,14 @@ public class UsuarioController {
         return "login/index";
     }
 
+    @RequestMapping("/esqueci_senha")
+    public String esqueciSenha() {
+        return "login/esqueci_senha";
+    }
+
+    @RequestMapping("/cadastro")
+    public String cadastro() {
+        return "login/cadastro";
+    }
+
 }

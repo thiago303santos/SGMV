@@ -29,9 +29,9 @@ body {
         }
 
         body {
-            background: url('/images/bglogin.png') no-repeat center center fixed;
+            /*background: url('') no-repeat center center fixed;
             background-size: cover;
-            height: 100vh;
+            height: 100vh;*/
         }
 
         .login-container {
