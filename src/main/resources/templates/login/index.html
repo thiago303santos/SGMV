@@ -8,39 +8,83 @@
     <link rel="stylesheet" th:href="@{/lib/bootstrap/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
+    <!-- jQuery + SweetAlert2 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <div class="login-card">
-      <h3 class="text-center mb-4">Login</h3>
+<div class="login-card">
+    <h3 class="text-center mb-4">Login</h3>
 
-      <form th:action="@{/login}" method="post">
-          <!-- Usuário -->
-          <div class="mb-3">
-              <span class="material-symbols-outlined">person</span>
-              <label for="username" class="form-label">Usuário</label>
-              <input type="text" class="form-control" id="username" name="username" required autofocus>
-          </div>
+    <form id="loginForm">
+        <!-- Usuário -->
+        <div class="mb-3">
+            <span class="material-symbols-outlined">person</span>
+            <label for="username" class="form-label">Usuário (e-mail)</label>
+            <input type="text" class="form-control" id="username" name="username" required autofocus>
+        </div>
 
-          <!-- Senha -->
-          <div class="mb-3">
-              <span class="material-symbols-outlined">vpn_key</span>
-              <label for="password" class="form-label">Senha</label>
-              <input type="password" class="form-control" id="password" name="password" required>
-          </div>
-          <!-- Botão -->
-          <div class="d-grid">
-              <button type="input" class="btn btn-primary">Entrar</button>
-          </div>
-          <div>
-              <a th:href="@{esqueci_senha}">Esqueci a senha</a>
-          </div>
-          <div>
+        <!-- Senha -->
+        <div class="mb-3">
+            <span class="material-symbols-outlined">vpn_key</span>
+            <label for="password" class="form-label">Senha</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
 
-              <a th:href="@{cadastro}">Cadastro</a>
-          </div>
-      </form>
-  </div>
+        <!-- Botão -->
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+        <div>
+            <a th:href="@{esqueci_senha}">Esqueci a senha</a>
+        </div>
+        <div>
+            <a th:href="@{cadastro}">Cadastro</a>
+        </div>
+    </form>
+</div>
+
 <!-- Bootstrap JS -->
 <script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#loginForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const loginData = {
+                emailUsuario: $('#username').val(),
+                senha_usuario: $('#password').val()
+            };
+
+            $.ajax({
+                url: '/logarUsuario',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(loginData),
+                success: function(response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Login realizado!',
+                        text: response,
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.href = "/home"; // redireciona após sucesso
+                    });
+                },
+                error: function(xhr) {
+                    let errorMessage = xhr.responseText || "Credenciais inválidas.";
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro no login',
+                        text: errorMessage
+                    });
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

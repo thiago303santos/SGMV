@@ -8,12 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import sgmv.demo.model.Usuario;
 import sgmv.demo.repository.UsuarioRepository;
@@ -31,22 +29,26 @@ public class UsuarioController {
     
 
     // Método de Cadastro
-    @PostMapping("/cadastro")
-    public String cadastrarUsuario(@RequestBody Usuario usuario, RedirectAttributes redirectAttributes) {
+    @PostMapping("/cadastrarUsuario")
+    @ResponseBody
+    public ResponseEntity<?> cadastrarUsuario(@RequestBody Usuario usuario) {
         if (usuarioRepository.findByEmailUsuario(usuario.getEmailUsuario()).isPresent()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Usuário com este e-mail já existe!");
-            return "redirect:/cadastro"; // Redireciona de volta para a tela de cadastro
+            return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body("Usuário com este e-mail já existe!");
         }
 
         usuario.setSenha_usuario(passwordEncoder.encode(usuario.getSenha_usuario()));
         usuarioRepository.save(usuario);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Usuário registrado com sucesso! Faça seu login.");
-        return "redirect:/login"; // Redireciona para a tela de login
+        return ResponseEntity.ok("success");
     }
 
+
+
+
     // Método para o login
-    @PostMapping("/login")
+    @PostMapping("/logarUsuario")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginData) {
         String emailUsuario = loginData.get("emailUsuario");
