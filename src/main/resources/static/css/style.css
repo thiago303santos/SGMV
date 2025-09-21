@@ -1,51 +1,50 @@
-body {
-            background-color: #121212; /* fundo escuro */
-            color: #fff;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+/* Garante que o corpo da página ocupe a altura total da tela */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding-top: 56px; /* Adiciona espaço no topo para a navbar fixa */
+    background-color: #121212;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-        .login-card {
-            background-color: #1e1e1e;
-            border-radius: 12px;
-            padding: 2rem;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
-        }
+/* Container principal para o conteúdo, ocupando o restante da altura */
+.main-content {
+    height: 100%;
+}
 
-        .form-control {
-            background-color: #2b2b2b;
-            border: none;
-            color: #fff;
-        }
+/* Estilo para o card de login */
+.login-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
+}
 
-        .form-control:focus {
-            background-color: #2b2b2b;
-            color: #fff;
-            box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
-        }
+/* Estilo para os campos de formulário */
+.form-control {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    color: #000;
+}
 
-        body {
-            background: url('/images/bglogin.png') no-repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
-        }
+.form-control:focus {
+    background-color: #f8f9fa;
+    color: #000;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+}
 
-        .login-container {
-            background-color: rgba(0, 0, 0, 0.75);
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 400px;
-            margin: auto;
-            margin-top: 10%;
-            color: white;
-        }
+/* Estilos para o carrossel */
+.carousel-item img {
+    object-fit: cover;
+}
 
-        h1 {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+    padding: 10px;
+    bottom: 20px;
+    color: #fff;
+}

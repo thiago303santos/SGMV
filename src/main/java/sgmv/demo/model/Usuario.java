@@ -1,5 +1,6 @@
 package sgmv.demo.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,10 @@ public class Usuario implements Serializable {
     private String cpf_usuario;
     private String nome_usuario;
     private String telefone_usuario;
-    private String email_usuario;
+    @Column(name = "email_usuario")
+    private String emailUsuario;
+    private String senha_usuario;
+    private int tipo_usuario; // Ex: ADMIN, USER
 
     public int getId_usuario() {
         return id_usuario;
@@ -42,11 +46,24 @@ public class Usuario implements Serializable {
     public void setTelefone_usuario(String telefone_usuario) {
         this.telefone_usuario = telefone_usuario;
     }
-    public String getEmail_usuario() {
-        return email_usuario;
+    public String getEmailUsuario() {
+        return emailUsuario;
     }
-    public void setEmail_usuario(String email_usuario) {
-        this.email_usuario = email_usuario;
+    public void setEmailUsuario(String emailUsuario) {
+        this.emailUsuario = emailUsuario;
     }
+    public String getSenha_usuario() {
+        return senha_usuario;
+    }
+    public void setSenha_usuario(String senha_usuario) {
+        this.senha_usuario = senha_usuario;
+    }
+    public int getTipo_usuario() {
+        return tipo_usuario;
+    }
+    public void setTipo_usuario(int tipo_usuario) {
+        this.tipo_usuario = tipo_usuario;
+    }
+
 
 }
