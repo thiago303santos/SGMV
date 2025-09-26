@@ -1,0 +1,16 @@
+<!-- templates/fragments/_head.html -->
+<head xmlns:th="http://www.thymeleaf.org" th:fragment="head">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title th:text="${pageTitle} ?: 'Sistema Oficina'">Sistema Oficina</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/lib/bootstrap/css/bootstrap.min.css}" />
+
+    <!-- CSS custom -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+    <!-- Google Material Symbols -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>

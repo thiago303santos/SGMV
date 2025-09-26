@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/_head :: head}"></head>
+<body class="has-navbar">
+    <div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
+
+    <div class="container mt-4">
+
+    <!-- Cards de Funcionalidades -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card card-funcionalidade shadow text-center" 
+                 th:onclick="|window.location.href='/ordem/nova'|">
+                <div class="card-body">
+                    <span class="material-symbols-outlined fs-1">add_task</span>
+                    <h5 class="card-title mt-2">Criar Ordem de Serviço</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-funcionalidade shadow text-center" 
+                 th:onclick="|window.location.href='/ordem/lista'|">
+                <div class="card-body">
+                    <span class="material-symbols-outlined fs-1">assignment</span>
+                    <h5 class="card-title mt-2">Acompanhar Ordens</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-funcionalidade shadow text-center" 
+                 th:onclick="|window.location.href='/estoque'|">
+                <div class="card-body">
+                    <span class="material-symbols-outlined fs-1">inventory_2</span>
+                    <h5 class="card-title mt-2">Gerenciar Estoque</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-funcionalidade shadow text-center" 
+                 th:onclick="|window.location.href='/veiculos'|">
+                <div class="card-body">
+                    <span class="material-symbols-outlined fs-1">directions_car</span>
+                    <h5 class="card-title mt-2">Gerenciar Veículos</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-funcionalidade shadow text-center" 
+                 th:onclick="|window.location.href='/clientes'|">
+                <div class="card-body">
+                    <span class="material-symbols-outlined fs-1">group</span>
+                    <h5 class="card-title mt-2">Gerenciar Clientes</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header">Ordens de Serviço - Últimos 6 meses</div>
+                <div class="card-body">
+                    <canvas id="graficoOrdens"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header">Estoque - Itens mais usados</div>
+                <div class="card-body">
+                    <canvas id="graficoEstoque"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:src="@{/js/main.js}"></script>
+
+<script>
+    // Gráfico Ordens
+    new Chart(document.getElementById("graficoOrdens"), {
+        type: 'line',
+        data: {
+            labels: ["Mai", "Jun", "Jul", "Ago", "Set", "Out"],
+            datasets: [{
+                label: "Ordens",
+                data: [12, 19, 3, 5, 2, 10],
+                borderColor: "blue",
+                fill: false
+            }]
+        }
+    });
+
+    // Gráfico Estoque
+    new Chart(document.getElementById("graficoEstoque"), {
+        type: 'doughnut',
+        data: {
+            labels: ["Óleo", "Pneu", "Filtro", "Pastilha"],
+            datasets: [{
+                data: [30, 20, 25, 25],
+                backgroundColor: ["#007bff", "#28a745", "#ffc107", "#dc3545"]
+            }]
+        }
+    });
+</script>
+
+</body>
+</html>

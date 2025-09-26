@@ -1,38 +1,34 @@
 package sgmv.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_funcionario")
 public class Funcionario implements Serializable {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_funcionario;
-    private String nome_funcionario;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idFuncionario;
+
+    private String nomeFuncionario;
     private String especialidade;
-   
-    public int getId_funcionario() {
-        return id_funcionario;
-    }
-    public void setId_funcionario(int id_funcionario) {
-        this.id_funcionario = id_funcionario;
-    }
-    public String getNome_funcionario() {
-        return nome_funcionario;
-    }
-    public void setNome_funcionario(String nome_funcionario) {
-        this.nome_funcionario = nome_funcionario;
-    }
-    public String getEspecialidade() {
-        return especialidade;
-    }
-    public void setEspecialidade(String especialidade) {
-        this.especialidade = especialidade;
-    }
-    
+
+    @OneToMany(mappedBy = "funcionario")
+    private List<Manutencao> manutencoes = new ArrayList<>();
+
+    // --- GETTERS E SETTERS ---
+    public Long getIdFuncionario() { return idFuncionario; }
+    public void setIdFuncionario(Long idFuncionario) { this.idFuncionario = idFuncionario; }
+
+    public String getNomeFuncionario() { return nomeFuncionario; }
+    public void setNomeFuncionario(String nomeFuncionario) { this.nomeFuncionario = nomeFuncionario; }
+
+    public String getEspecialidade() { return especialidade; }
+    public void setEspecialidade(String especialidade) { this.especialidade = especialidade; }
+
+    public List<Manutencao> getManutencoes() { return manutencoes; }
+    public void setManutencoes(List<Manutencao> manutencoes) { this.manutencoes = manutencoes; }
 }

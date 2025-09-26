@@ -1,0 +1,45 @@
+<!-- templates/fragments/_navbar.html -->
+<nav xmlns:th="http://www.thymeleaf.org"
+     class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
+     th:fragment="navbar(notificacoes, usuarioNome)">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <a class="navbar-brand" th:href="@{/home}">Sistema Oficina</a>
+
+        <!-- Botão toggler (mobile) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Conteúdo colapsável -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!-- Aqui você pode adicionar links de menu se quiser -->
+            </ul>
+
+            <!-- Lado direito (notificações + usuário) -->
+            <div class="d-flex align-items-center">
+                <!-- Notificações -->
+                <button class="btn btn-dark position-relative me-3" aria-label="Notificações">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                          th:text="${notificacoes} ?: 0">0</span>
+                </button>
+
+                <!-- Usuário -->
+                <div class="dropdown">
+                    <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                       href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img th:src="@{/img/profile.png}" class="profile-img me-2" />
+                        <span th:text="${usuarioNome} ?: 'Usuário'">Usuário</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#">Perfil</a></li>
+                        <li><a class="dropdown-item" th:href="@{/logout}">Sair</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

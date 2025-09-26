@@ -1,69 +1,54 @@
 package sgmv.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_usuario")
 public class Usuario implements Serializable {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_usuario;
-    private String cpf_usuario;
-    private String nome_usuario;
-    private String telefone_usuario;
-    @Column(name = "email_usuario")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idUsuario;
+
+    private String cpfUsuario;
+    private String nomeUsuario;
+    private String telefoneUsuario;
+
+    @Column(unique = true)
     private String emailUsuario;
-    private String senha_usuario;
-    private int tipo_usuario; // Ex: ADMIN, USER
 
-    public int getId_usuario() {
-        return id_usuario;
-    }
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
-    }
-    public String getCpf_usuario() {
-        return cpf_usuario;
-    }
-    public void setCpf_usuario(String cpf_usuario) {
-        this.cpf_usuario = cpf_usuario;
-    }
-    public String getNome_usuario() {
-        return nome_usuario;
-    }
-    public void setNome_usuario(String nome_usuario) {
-        this.nome_usuario = nome_usuario;
-    }
-    public String getTelefone_usuario() {
-        return telefone_usuario;
-    }
-    public void setTelefone_usuario(String telefone_usuario) {
-        this.telefone_usuario = telefone_usuario;
-    }
-    public String getEmailUsuario() {
-        return emailUsuario;
-    }
-    public void setEmailUsuario(String emailUsuario) {
-        this.emailUsuario = emailUsuario;
-    }
-    public String getSenha_usuario() {
-        return senha_usuario;
-    }
-    public void setSenha_usuario(String senha_usuario) {
-        this.senha_usuario = senha_usuario;
-    }
-    public int getTipo_usuario() {
-        return tipo_usuario;
-    }
-    public void setTipo_usuario(int tipo_usuario) {
-        this.tipo_usuario = tipo_usuario;
-    }
+    private String senhaUsuario;
+    private int tipoUsuario; // 0 = ADMIN, 1 = FUNCIONARIO, 2 = GERENTE, etc.
 
+    // Usuário pode criar/manter várias manutenções
+    @OneToMany(mappedBy = "usuarioResponsavel")
+    private List<Manutencao> manutencoes = new ArrayList<>();
 
+    // --- GETTERS E SETTERS ---
+    public Long getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(Long idUsuario) { this.idUsuario = idUsuario; }
+
+    public String getCpfUsuario() { return cpfUsuario; }
+    public void setCpfUsuario(String cpfUsuario) { this.cpfUsuario = cpfUsuario; }
+
+    public String getNomeUsuario() { return nomeUsuario; }
+    public void setNomeUsuario(String nomeUsuario) { this.nomeUsuario = nomeUsuario; }
+
+    public String getTelefoneUsuario() { return telefoneUsuario; }
+    public void setTelefoneUsuario(String telefoneUsuario) { this.telefoneUsuario = telefoneUsuario; }
+
+    public String getEmailUsuario() { return emailUsuario; }
+    public void setEmailUsuario(String emailUsuario) { this.emailUsuario = emailUsuario; }
+
+    public String getSenhaUsuario() { return senhaUsuario; }
+    public void setSenhaUsuario(String senhaUsuario) { this.senhaUsuario = senhaUsuario; }
+
+    public int getTipoUsuario() { return tipoUsuario; }
+    public void setTipoUsuario(int tipoUsuario) { this.tipoUsuario = tipoUsuario; }
+
+    public List<Manutencao> getManutencoes() { return manutencoes; }
+    public void setManutencoes(List<Manutencao> manutencoes) { this.manutencoes = manutencoes; }
 }
