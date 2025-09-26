@@ -73,7 +73,12 @@ public class UsuarioController {
         return "login/index";
     }
 
-
+    // --- Logout ---
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // encerra a sessão do usuário
+        return "redirect:/"; // volta para a tela de login
+    }
 
     // --- Troca de senha ---
     @PostMapping("/troca_senha")

@@ -1,11 +1,17 @@
-<!-- templates/fragments/_head.html -->
 <head xmlns:th="http://www.thymeleaf.org" th:fragment="head">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title th:text="${pageTitle} ?: 'Sistema Oficina'">Sistema Oficina</title>
+    <title th:text="${pageTitle} ?: 'Sistema Oficina'">SGMV</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" th:href="@{/lib/bootstrap/css/bootstrap.min.css}" />
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" th:href="@{/lib/datatables/jquery.dataTables.min.css}" />
+    <link rel="stylesheet" th:href="@{/lib/datatables/responsive.dataTables.min.css}" />
+    <link rel="stylesheet" th:href="@{/lib/datatables/select.dataTables.min.css}" />
+    <link rel="stylesheet" th:href="@{/lib/datatables/buttons.dataTables.min.css}" />
+    <link rel="stylesheet" th:href="@{/lib/datatables/rowReorder.dataTables.min.css}" />
 
     <!-- CSS custom -->
     <link rel="stylesheet" th:href="@{/css/style.css}" />
