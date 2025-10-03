@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/_head :: head}"></head>
+<body>
+<div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
+
+<div class="container mt-5">
+    <h2 th:text="${agendamento.idAgendamento == null ? 'Novo Agendamento' : 'Editar Agendamento'}"></h2>
+
+    <form th:action="@{/agendamentos/salvar}" th:object="${agendamento}" method="post">
+
+        <input type="hidden" th:field="*{idAgendamento}"/>
+
+        <div class="mb-3">
+            <label class="form-label">Nome do Cliente</label>
+            <input type="text" th:field="*{nomeCliente}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Data do Agendamento</label>
+            <input type="datetime-local" th:field="*{dataAgendamento}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descrição do Serviço</label>
+            <input type="text" th:field="*{descricaoServico}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select th:field="*{statusAgendamento}" class="form-select">
+                <option th:value="PENDENTE">Pendente</option>
+                <option th:value="CONFIRMADO">Confirmado</option>
+                <option th:value="CONCLUIDO">Concluído</option>
+                <option th:value="CANCELADO">Cancelado</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Observações</label>
+            <textarea th:field="*{observacoes}" class="form-control" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a th:href="@{/agendamentos}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

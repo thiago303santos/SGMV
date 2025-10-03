@@ -1,14 +1,27 @@
 <div th:fragment="scripts">
-    <!-- jQuery -->
+    <!-- jQuery (antes de tudo que depende dele) -->
     <script th:src="@{/lib/jquery/jquery.min.js}"></script>
-    <script th:src="@{/lib/jquery/jquery-ui.min.js}"></script>
+
+    <!-- Bootstrap (bundle já inclui Popper.js) -->
+    <script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+    <!-- Plugins extras -->
+    <script th:src="@{/lib/jquery-ui.min.js}"></script>
     <script th:src="@{/lib/jquery-mask/jquery.mask.min.js}"></script>
 
     <!-- DataTables -->
     <script th:src="@{/lib/datatables/jquery.dataTables.min.js}"></script>
-    <script th:src="@{/lib/datatables/dataTables.rowReorder.min.js}"></script>
+    <script th:src="@{/lib/datatables/dataTables.bootstrap4.min.js}"></script>
     <script th:src="@{/lib/datatables/dataTables.responsive.min.js}"></script>
+    <script th:src="@{/lib/datatables/responsive.bootstrap4.min.js}"></script>
     <script th:src="@{/lib/datatables/dataTables.select.min.js}"></script>
     <script th:src="@{/lib/datatables/dataTables.buttons.min.js}"></script>
-    <script th:src="@{/lib/datatables/dataTables.cellEdit.js}"></script>
+    <script th:src="@{/lib/datatables/buttons.bootstrap4.min.js}"></script>
+    <script th:src="@{/lib/datatables/jszip.min.js}"></script>
+    <script th:src="@{/lib/datatables/pdfmake.min.js}"></script>
+    <script th:src="@{/lib/datatables/vfs_fonts.js}"></script>
+    <script th:src="@{/lib/datatables/buttons.html5.min.js}"></script>
+    <script th:src="@{/lib/datatables/buttons.print.min.js}"></script>
+    <!-- Chart.js (adicione se não tiver local, pode usar CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </div>

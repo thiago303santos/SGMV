@@ -2,127 +2,206 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/_head :: head}"></head>
 <body class="has-navbar">
+
+    <!-- Navbar -->
     <div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
 
     <div class="container mt-4">
 
-    <!-- Cards de Funcionalidades -->
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card card-funcionalidade shadow text-center" 
-                 th:onclick="|window.location.href='/ordem/nova'|">
-                <div class="card-body">
-                    <span class="material-symbols-outlined fs-1">calendar_add_on</span>
-                    <h5 class="card-title mt-2">Agendamento de Serviços</h5>
+        <!-- Cards de Funcionalidades -->
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card card-funcionalidade shadow text-center" 
+                     th:onclick="|window.location.href='/agendamentos/novo'|">
+                    <div class="card-body">
+                        <span class="material-symbols-outlined fs-1">calendar_add_on</span>
+                        <h5 class="card-title mt-2">Agendamento de Serviços</h5>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card card-funcionalidade shadow text-center" 
-                 th:onclick="|window.location.href='/ordem/nova'|">
-                <div class="card-body">
-                    <span class="material-symbols-outlined fs-1">add_task</span>
-                    <h5 class="card-title mt-2">Criar Ordem de Serviço</h5>
+            
+            <div class="col-md-4">
+                <div class="card card-funcionalidade shadow text-center" 
+                     th:onclick="|window.location.href='/ordem/nova'|">
+                    <div class="card-body">
+                        <span class="material-symbols-outlined fs-1">add_task</span>
+                        <h5 class="card-title mt-2">Criar Ordem de Serviço</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-funcionalidade shadow text-center" 
+                     th:onclick="|window.location.href='/ordem/lista'|">
+                    <div class="card-body">
+                        <span class="material-symbols-outlined fs-1">assignment</span>
+                        <h5 class="card-title mt-2">Acompanhar Ordens</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-funcionalidade shadow text-center" 
+                     th:onclick="|window.location.href='/estoque'|">
+                    <div class="card-body">
+                        <span class="material-symbols-outlined fs-1">inventory_2</span>
+                        <h5 class="card-title mt-2">Gerenciar Estoque</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-funcionalidade shadow text-center" 
+                     th:onclick="|window.location.href='/veiculos'|">
+                    <div class="card-body">
+                        <span class="material-symbols-outlined fs-1">directions_car</span>
+                        <h5 class="card-title mt-2">Gerenciar Veículos</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-funcionalidade shadow text-center" 
+                     th:onclick="|window.location.href='/clientes'|">
+                    <div class="card-body">
+                        <span class="material-symbols-outlined fs-1">group</span>
+                        <h5 class="card-title mt-2">Gerenciar Clientes</h5>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card card-funcionalidade shadow text-center" 
-                 th:onclick="|window.location.href='/ordem/lista'|">
-                <div class="card-body">
-                    <span class="material-symbols-outlined fs-1">assignment</span>
-                    <h5 class="card-title mt-2">Acompanhar Ordens</h5>
+        <!-- DataTable de Agendamentos -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header">Agendamentos</div>
+                    <div class="card-body">
+                        <table id="tabelaAgendamentos" class="table table-striped table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Data/Hora</th>
+                                    <th>Serviço</th>
+                                    <th>Status</th>
+                                    <th>Observações</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Exemplo estático (substituir depois por Thymeleaf ou Ajax) -->
+                                <tr>
+                                    <td>1</td>
+                                    <td>João Silva</td>
+                                    <td>2025-10-02 10:00</td>
+                                    <td>Troca de óleo</td>
+                                    <td>Pendente</td>
+                                    <td>Sem observações</td>
+                                    <td>
+                                        <a th:href="@{/agendamentos/editar/1}" class="btn btn-sm btn-primary">Editar</a>
+                                        <a th:href="@{/agendamentos/excluir/1}" class="btn btn-sm btn-danger">Excluir</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card card-funcionalidade shadow text-center" 
-                 th:onclick="|window.location.href='/estoque'|">
-                <div class="card-body">
-                    <span class="material-symbols-outlined fs-1">inventory_2</span>
-                    <h5 class="card-title mt-2">Gerenciar Estoque</h5>
+        <!-- Gráficos -->
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header">Ordens de Serviço - Últimos 6 meses</div>
+                    <div class="card-body">
+                        <canvas id="graficoOrdens"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header">Estoque - Itens mais usados</div>
+                    <div class="card-body">
+                        <canvas id="graficoEstoque"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card card-funcionalidade shadow text-center" 
-                 th:onclick="|window.location.href='/veiculos'|">
-                <div class="card-body">
-                    <span class="material-symbols-outlined fs-1">directions_car</span>
-                    <h5 class="card-title mt-2">Gerenciar Veículos</h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card card-funcionalidade shadow text-center" 
-                 th:onclick="|window.location.href='/clientes'|">
-                <div class="card-body">
-                    <span class="material-symbols-outlined fs-1">group</span>
-                    <h5 class="card-title mt-2">Gerenciar Clientes</h5>
-                </div>
-            </div>
-        </div>
     </div>
+    <!-- Scripts -->
+    <div th:replace="~{fragments/_scripts :: scripts}"></div>
+    <script>
+        $(document).ready(function () {
+            inicializarDataTable();
+            inicializarGraficos();
+        });
 
-    <!-- Gráficos -->
-    <div class="row mt-5">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header">Ordens de Serviço - Últimos 6 meses</div>
-                <div class="card-body">
-                    <canvas id="graficoOrdens"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header">Estoque - Itens mais usados</div>
-                <div class="card-body">
-                    <canvas id="graficoEstoque"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<!-- Scripts -->
-<script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script th:src="@{/js/main.js}"></script>
-
-<script>
-    // Gráfico Ordens
-    new Chart(document.getElementById("graficoOrdens"), {
-        type: 'line',
-        data: {
-            labels: ["Mai", "Jun", "Jul", "Ago", "Set", "Out"],
-            datasets: [{
-                label: "Ordens",
-                data: [12, 19, 3, 5, 2, 10],
-                borderColor: "blue",
-                fill: false
-            }]
+        function inicializarDataTable() {
+            $('#tabelaAgendamentos').DataTable({
+                responsive: true,
+                select: {
+                    style: 'multi',
+                    selector: 'td:first-child'
+                },
+                rowReorder: true,
+                dom: 'Bfrtip',
+                buttons: ['copy', 'excel', 'pdf', 'print'],
+                language: {
+                    sEmptyTable: "Nenhum registro encontrado",
+                    sInfo: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    sInfoEmpty: "Mostrando 0 até 0 de 0 registros",
+                    sInfoFiltered: "(Filtrados de _MAX_ registros)",
+                    sLengthMenu: "_MENU_ resultados por página",
+                    sLoadingRecords: "Carregando...",
+                    sProcessing: "Processando...",
+                    sZeroRecords: "Nenhum registro encontrado",
+                    sSearch: "Pesquisar",
+                    oPaginate: {
+                        sNext: "Próximo",
+                        sPrevious: "Anterior",
+                        sFirst: "Primeiro",
+                        sLast: "Último"
+                    },
+                    oAria: {
+                        sSortAscending: ": Ordenar colunas de forma ascendente",
+                        sSortDescending: ": Ordenar colunas de forma descendente"
+                    }
+                }
+            });
         }
-    });
 
-    // Gráfico Estoque
-    new Chart(document.getElementById("graficoEstoque"), {
-        type: 'doughnut',
-        data: {
-            labels: ["Óleo", "Pneu", "Filtro", "Pastilha"],
-            datasets: [{
-                data: [30, 20, 25, 25],
-                backgroundColor: ["#007bff", "#28a745", "#ffc107", "#dc3545"]
-            }]
+        function inicializarGraficos() {
+            // Gráfico de Ordens
+            new Chart(document.getElementById("graficoOrdens"), {
+                type: 'line',
+                data: {
+                    labels: ["Mai", "Jun", "Jul", "Ago", "Set", "Out"],
+                    datasets: [{
+                        label: "Ordens",
+                        data: [12, 19, 3, 5, 2, 10],
+                        borderColor: "blue",
+                        fill: false
+                    }]
+                }
+            });
+
+            // Gráfico de Estoque
+            new Chart(document.getElementById("graficoEstoque"), {
+                type: 'doughnut',
+                data: {
+                    labels: ["Óleo", "Pneu", "Filtro", "Pastilha"],
+                    datasets: [{
+                        data: [30, 20, 25, 25],
+                        backgroundColor: ["#007bff", "#28a745", "#ffc107", "#dc3545"]
+                    }]
+                }
+            });
         }
-    });
-</script>
+    </script>
 
 </body>
 </html>

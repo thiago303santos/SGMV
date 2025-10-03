@@ -1,22 +1,24 @@
-<head xmlns:th="http://www.thymeleaf.org" th:fragment="head">
+<head th:fragment="head">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title th:text="${pageTitle} ?: 'Sistema Oficina'">SGMV</title>
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap -->
     <link rel="stylesheet" th:href="@{/lib/bootstrap/css/bootstrap.min.css}" />
 
-    <!-- DataTables CSS -->
+    <!-- DataTables (arquivos que realmente existem na sua pasta) -->
     <link rel="stylesheet" th:href="@{/lib/datatables/jquery.dataTables.min.css}" />
+    <link rel="stylesheet" th:href="@{/lib/datatables/dataTables.bootstrap4.css}" />
     <link rel="stylesheet" th:href="@{/lib/datatables/responsive.dataTables.min.css}" />
     <link rel="stylesheet" th:href="@{/lib/datatables/select.dataTables.min.css}" />
     <link rel="stylesheet" th:href="@{/lib/datatables/buttons.dataTables.min.css}" />
     <link rel="stylesheet" th:href="@{/lib/datatables/rowReorder.dataTables.min.css}" />
 
-    <!-- CSS custom -->
+
+    <!-- Estilos customizados -->
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 
-    <!-- Google Material Symbols -->
+    <!-- Ícones do Google -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
