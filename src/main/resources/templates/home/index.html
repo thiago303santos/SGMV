@@ -90,19 +90,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Exemplo estático (substituir depois por Thymeleaf ou Ajax) -->
-                                <tr>
-                                    <td>1</td>
-                                    <td>João Silva</td>
-                                    <td>2025-10-02 10:00</td>
-                                    <td>Troca de óleo</td>
-                                    <td>Pendente</td>
-                                    <td>Sem observações</td>
-                                    <td>
-                                        <a th:href="@{/agendamentos/editar/1}" class="btn btn-sm btn-primary">Editar</a>
-                                        <a th:href="@{/agendamentos/excluir/1}" class="btn btn-sm btn-danger">Excluir</a>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -141,38 +128,54 @@
         });
 
         function inicializarDataTable() {
-            $('#tabelaAgendamentos').DataTable({
-                responsive: true,
-                select: {
-                    style: 'multi',
-                    selector: 'td:first-child'
-                },
-                rowReorder: true,
-                dom: 'Bfrtip',
-                buttons: ['copy', 'excel', 'pdf', 'print'],
-                language: {
-                    sEmptyTable: "Nenhum registro encontrado",
-                    sInfo: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                    sInfoEmpty: "Mostrando 0 até 0 de 0 registros",
-                    sInfoFiltered: "(Filtrados de _MAX_ registros)",
-                    sLengthMenu: "_MENU_ resultados por página",
-                    sLoadingRecords: "Carregando...",
-                    sProcessing: "Processando...",
-                    sZeroRecords: "Nenhum registro encontrado",
-                    sSearch: "Pesquisar",
-                    oPaginate: {
-                        sNext: "Próximo",
-                        sPrevious: "Anterior",
-                        sFirst: "Primeiro",
-                        sLast: "Último"
-                    },
-                    oAria: {
-                        sSortAscending: ": Ordenar colunas de forma ascendente",
-                        sSortDescending: ": Ordenar colunas de forma descendente"
+        $('#tabelaAgendamentos').DataTable({
+            destroy: true, // permite re-inicializar a tabela
+            responsive: true,
+            ajax: {
+                url: "/agendamentos/listar", // endpoint JSON
+                dataSrc: "" // JSON já é uma lista
+            },
+            deferRender: true,
+            columns: [
+                { data: "idAgendamento" },
+                { data: "nomeCliente" },
+                { data: "dataAgendamento" },
+                { data: "descricaoServico" },
+                { data: "statusAgendamento" },
+                { data: "observacoes" },
+                {
+                    data: "idAgendamento",
+                    render: function(data, type, row) {
+                        return `
+                            <a href="/agendamentos/editar/${data}" class="btn btn-sm btn-primary">Editar</a>
+                            <a href="/agendamentos/excluir/${data}" class="btn btn-sm btn-danger">Excluir</a>
+                        `;
                     }
                 }
-            });
-        }
+            ],
+            language: {
+                sEmptyTable: "Nenhum registro encontrado",
+                sInfo: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                sInfoEmpty: "Mostrando 0 até 0 de 0 registros",
+                sInfoFiltered: "(Filtrados de _MAX_ registros)",
+                sLengthMenu: "_MENU_ resultados por página",
+                sLoadingRecords: "Carregando...",
+                sProcessing: "Processando...",
+                sZeroRecords: "Nenhum registro encontrado",
+                sSearch: "Pesquisar",
+                oPaginate: {
+                    sNext: "Próximo",
+                    sPrevious: "Anterior",
+                    sFirst: "Primeiro",
+                    sLast: "Último"
+                },
+                oAria: {
+                    sSortAscending: ": Ordenar colunas de forma ascendente",
+                    sSortDescending: ": Ordenar colunas de forma descendente"
+                }
+            }
+        });
+    }
 
         function inicializarGraficos() {
             // Gráfico de Ordens

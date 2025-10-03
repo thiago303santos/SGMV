@@ -29,6 +29,12 @@ public class AgendamentoController {
         return "agendamento/lista"; // criaremos depois
     }
 
+    @GetMapping("/listar")
+    @ResponseBody
+    public List<Agendamento> listarAgendamentosAjax() {
+        return agendamentoRepository.findAll();
+    }
+
     // Formulário de novo agendamento
     @GetMapping("/novo")
     public String novoAgendamento(Model model) {
