@@ -1,159 +1,235 @@
-/* Estilo geral da página */
+:root {
+    --primary-900: #12314a;
+    --primary-700: #1c4870;
+    --primary-500: #2f6fa3;
+    --accent: #2f6fa3;
+    --accent-contrast: #fff;
+    --bg: #f4f7fa;
+    --surface: #ffffff;
+    --text: #122027;
+    --muted: #5f6b75;
+}
+
+/* ===== Corpo ===== */
 body {
-    background-color: #121212; /* fundo escuro */
-    color: #fff;
+    background: var(--bg);
+    color: var(--text);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+    transition: background 0.5s ease;
 }
 
-.login-card {
-    background-color: rgba(30, 30, 30, 0.95); /* mais contraste */
-    border-radius: 15px;
-    padding: 2rem;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
-    box-sizing: border-box;
+body.has-navbar {
+    padding-top: 70px; /* ajuste conforme altura da navbar */
 }
-/* Container principal do login */
-.login-container {
-    background-color: rgba(30, 30, 30, 0.95); /* mais contraste */
-    border-radius: 15px;
-    padding: 2rem;
+
+/* ===== Navbar ===== */
+.navbar, .card-header {
+    background: linear-gradient(90deg, var(--primary-900), var(--primary-700));
+    color: var(--accent-contrast) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 0.5rem 1rem;
+}
+
+.navbar .navbar-brand, .navbar a {
+    color: var(--accent-contrast) !important;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link {
+    color: var(--accent-contrast);
+    transition: color 0.3s ease, background 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: var(--accent-contrast);
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+}
+
+.navbar .dropdown-menu {
+    background: var(--surface);
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    min-width: 180px;
+    padding: 0.5rem 0;
+}
+
+.navbar .dropdown-item {
+    color: var(--muted);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.navbar .dropdown-item:hover {
+    background: linear-gradient(90deg, var(--primary-900), var(--primary-700));
+    color: var(--accent-contrast);
+    border-radius: 6px;
+}
+
+.navbar .btn-dark {
+    background: rgba(255,255,255,0.15);
+    color: var(--accent-contrast);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.navbar .btn-dark:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+/* Badge de notificações */
+.navbar .badge {
+    font-size: 0.7rem;
+    padding: 0.35em 0.55em;
+    background-color: #ff4d4f;
+    color: #fff;
+    border-radius: 50%;
+}
+
+/* Ícone do usuário */
+.navbar .profile-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent-contrast);
+}
+
+/* ===== Login / Cards ===== */
+.login-card, .login-container {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 2.5rem;
     width: 90%;
-    max-width: 400px;
-    box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
+    max-width: 420px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     text-align: center;
     box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Título do login */
+.login-card:hover, .login-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
 .login-container h1 {
     font-weight: bold;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(90deg, var(--primary-900), var(--primary-700));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2rem;
 }
 
-/* Alertas dentro do login-card */
+/* Alerts */
 .login-card .alert {
-    display: block; /* agora o alerta é visível */
-    background-color: #f8d7da;
-    color: #721c24;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 1rem;
+    display: block;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 1.5rem;
     text-align: center;
     font-weight: bold;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
 }
 
-/* Inputs */
-.form-control {
-    background-color: #2b2b2b;
-    border: none;
-    text-align: left;
-    color: #fff;
-    padding: 0.75rem 1rem; /* aumento do tamanho do input */
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    width: 100%;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
-
-.form-control:focus {
-    background-color: #2b2b2b;
-    color: #fff;
-    box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
-    outline: none;
-}
-
-
-
-/* Alertas */
-.alert {
-    padding: 12px 20px;
-    margin: 1rem auto;
-    width: 90%;
-    max-width: 350px;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: bold;
-    display: none;
-    box-sizing: border-box;
-}
 .alert-success {
-    background-color: #d4edda;
+    background: linear-gradient(135deg, #c8e6c9, #d1f2eb);
     color: #155724;
-    border: 1px solid #c3e6cb;
+    border: 1px solid #a3d9a5;
 }
+
 .alert-error {
-    background-color: #f8d7da;
+    background: linear-gradient(135deg, #f8d7da, #fdd9e0);
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
 
-/* Foto do usuário */
-.profile-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+/* Inputs */
+.form-control {
+    background: #f4f7fa;
+    border: 1px solid #ced4da;
+    text-align: left;
+    color: var(--text);
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 1.25rem;
+    width: 100%;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background: var(--surface);
+    border-color: var(--primary-500);
+    color: var(--text);
+    box-shadow: 0 0 10px rgba(47,111,163,0.25);
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: var(--muted);
 }
 
 /* Cards de funcionalidades */
 .card-funcionalidade {
     cursor: pointer;
-    transition: transform 0.2s ease-in-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: var(--surface);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+    text-align: center;
 }
+
 .card-funcionalidade:hover {
-    transform: scale(1.05);
+    transform: scale(1.06);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
 
-/* Espaçamento para navbar fixa */
-body.has-navbar {
-    padding-top: 56px; /* altura padrão da navbar */
-}
-
-@media (min-width: 992px) {
-    body.has-navbar {
-        padding-top: 70px;
-    }
-}
-
-/* Ajustes responsivos extras */
-@media (max-width: 576px) {
-    .login-container {
-        padding: 1.5rem;
-        width: 95%;
-    }
-    .alert {
-        width: 95%;
-    }
+.card-title {
+    font-weight: 600;
+    color: var(--text);
 }
 
 /* Botões */
 .btn-primary {
-    background-color: #0d6efd;
+    background: linear-gradient(135deg, var(--primary-900), var(--primary-700));
     border: none;
-    padding: 0.75rem;
+    padding: 0.85rem;
     font-size: 1rem;
-    border-radius: 8px;
-    transition: background-color 0.2s ease-in-out;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    color: var(--accent-contrast);
 }
+
 .btn-primary:hover {
-    background-color: #0b5ed7;
+    background: linear-gradient(135deg, var(--primary-700), var(--primary-500));
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 /* Links */
 .login-card a {
-    color: #0d6efd;
+    color: var(--primary-500);
     text-decoration: none;
+    transition: color 0.3s ease;
 }
+
 .login-card a:hover {
+    color: var(--primary-700);
     text-decoration: underline;
 }
 
@@ -161,8 +237,70 @@ body.has-navbar {
 .material-symbols-outlined {
     vertical-align: middle;
     margin-right: 0.5rem;
+    color: var(--primary-500);
 }
 
-.form-control::placeholder {
-    color: rgb(185, 180, 180);
+/* Tabela (DataTable) */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead {
+    background: var(--primary-700);
+    color: var(--accent-contrast);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f0f5fa;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(47,111,163,0.08);
+}
+
+/* Botões da tabela */
+.table .btn {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem; /* mesmo padding para todos */
+    border-radius: 6px; /* borda arredondada uniforme */
+    border: none;
+    min-width: 70px; /* largura mínima igual para todos */
+    text-align: center;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Botão Editar (azul) */
+.table .btn-edit {
+    background-color: var(--primary-700);
+    color: var(--accent-contrast);
+}
+
+.table .btn-edit:hover {
+    background-color: var(--primary-500);
+}
+
+/* Botão Excluir (vermelho) */
+.table .btn-delete {
+    background-color: #dc3545; /* vermelho padrão bootstrap */
+    color: #fff;
+}
+
+.table .btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* Badge */
+.badge {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+/* Card Header */
+.card .card-header {
+    font-weight: 600;
+    font-size: 16px;
 }

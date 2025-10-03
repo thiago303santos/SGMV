@@ -147,8 +147,8 @@
                     data: "idAgendamento",
                     render: function(data, type, row) {
                         return `
-                            <a href="/agendamentos/editar/${data}" class="btn btn-sm btn-primary">Editar</a>
-                            <a href="/agendamentos/excluir/${data}" class="btn btn-sm btn-danger">Excluir</a>
+                            <a href="/agendamentos/editar/${data}" class="btn btn-sm btn-edit">Editar</a>
+                            <a href="/agendamentos/excluir/${data}" class="btn btn-sm btn-delete">Excluir</a>
                         `;
                     }
                 }
@@ -178,32 +178,48 @@
     }
 
         function inicializarGraficos() {
-            // Gráfico de Ordens
-            new Chart(document.getElementById("graficoOrdens"), {
-                type: 'line',
-                data: {
-                    labels: ["Mai", "Jun", "Jul", "Ago", "Set", "Out"],
-                    datasets: [{
-                        label: "Ordens",
-                        data: [12, 19, 3, 5, 2, 10],
-                        borderColor: "blue",
-                        fill: false
-                    }]
-                }
-            });
+        // Gráfico de Ordens
+        new Chart(document.getElementById("graficoOrdens"), {
+            type: 'line',
+            data: {
+            labels: ["Mai", "Jun", "Jul", "Ago", "Set", "Out"],
+            datasets: [{
+                label: "Ordens",
+                data: [12, 19, 3, 5, 2, 10],
+                borderColor: "#2f6fa3",
+                backgroundColor: "rgba(47,111,163,0.2)",
+                fill: true,
+                tension: 0.35
+            }]
+            },
+            options: {
+            plugins: {
+                legend: { labels: { color: "#122027" } }
+            },
+            scales: {
+                x: { ticks: { color: "#5f6b75" } },
+                y: { ticks: { color: "#5f6b75" } }
+            }
+            }
+        });
 
             // Gráfico de Estoque
             new Chart(document.getElementById("graficoEstoque"), {
                 type: 'doughnut',
                 data: {
-                    labels: ["Óleo", "Pneu", "Filtro", "Pastilha"],
-                    datasets: [{
-                        data: [30, 20, 25, 25],
-                        backgroundColor: ["#007bff", "#28a745", "#ffc107", "#dc3545"]
-                    }]
+                labels: ["Óleo", "Pneu", "Filtro", "Pastilha"],
+                datasets: [{
+                    data: [30, 20, 25, 25],
+                    backgroundColor: ["#2f6fa3", "#28a745", "#ffc107", "#dc3545"]
+                }]
+                },
+                options: {
+                plugins: {
+                    legend: { labels: { color: "#122027" } }
+                }
                 }
             });
-        }
+        }    
     </script>
 
 </body>
