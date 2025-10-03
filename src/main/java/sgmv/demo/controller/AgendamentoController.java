@@ -46,7 +46,7 @@ public class AgendamentoController {
     @PostMapping("/salvar")
     public String salvarAgendamento(@ModelAttribute Agendamento agendamento) {
         agendamentoRepository.save(agendamento);
-        return "redirect:/home/index";
+        return "redirect:/home";
     }
 
     // Editar agendamento
