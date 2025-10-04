@@ -22,7 +22,7 @@
             
             <div class="col-md-4">
                 <div class="card card-funcionalidade shadow text-center" 
-                     th:onclick="|window.location.href='/ordem/nova'|">
+                     th:onclick="|window.location.href='/manutencao/nova'|">
                     <div class="card-body">
                         <span class="material-symbols-outlined fs-1">add_task</span>
                         <h5 class="card-title mt-2">Criar Ordem de Serviço</h5>
@@ -86,6 +86,33 @@
                                     <th>Serviço</th>
                                     <th>Status</th>
                                     <th>Observações</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DataTable de Agendamentos -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header">Ordem de Serviço</div>
+                    <div class="card-body">
+                        <table id="tabelaAcompanharOrdem" class="table table-striped table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Veículo</th>
+                                    <th>Data Entrada</th>
+                                    <th>Descrição</th>
+                                    <th>Status</th>
+                                    <th>Valor Total</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -176,6 +203,82 @@
             }
         });
     }
+
+        $(document).ready(function () {
+    $('#tabelaAcompanharOrdem').DataTable({
+        destroy: true,
+        responsive: true,
+        deferRender: true,
+        ajax: {
+            url: "/manutencao/lista-json", // endpoint JSON
+            dataSrc: "" // o JSON já é uma lista
+        },
+        columns: [
+            { data: "id" },
+            { data: "nomeCliente" },
+            { data: "modelo" },
+            { 
+                data: "dataEntrada",
+                render: function(data) {
+                    if (!data) return '';
+                    const dt = new Date(data);
+                    return dt.toLocaleDateString('pt-BR');
+                }
+            },
+            { data: "descricao" },
+            { 
+                data: "status",
+                render: function(data) {
+                    let color = 'black';
+                    if (data === 'EM_PROGRESSO' || data === 'Em andamento') color = 'orange';
+                    else if (data === 'FINALIZADO' || data === 'Concluído') color = 'green';
+                    else if (data === 'PENDENTE' || data === 'Pendente') color = 'red';
+                    return `<span style="color:${color}; font-weight:bold;">${data}</span>`;
+                }
+            },
+            { 
+                data: "vlTotal",
+                render: function(data) {
+                    return data ? Number(data).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '';
+                }
+            },
+            {
+                data: "id",
+                render: function(data, type, row) {
+                    return `
+                        <a href="/manutencao/editar/${data}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="/manutencao/pecas/${data}" class="btn btn-info btn-sm">Peças</a>
+                        <a href="/manutencao/detalhes/${data}" class="btn btn-secondary btn-sm">Detalhes</a>
+                    `;
+                }
+            }
+        ],
+        language: {
+            sEmptyTable: "Nenhum registro encontrado",
+            sInfo: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            sInfoEmpty: "Mostrando 0 até 0 de 0 registros",
+            sInfoFiltered: "(Filtrados de _MAX_ registros)",
+            sLengthMenu: "_MENU_ resultados por página",
+            sLoadingRecords: "Carregando...",
+            sProcessing: "Processando...",
+            sZeroRecords: "Nenhum registro encontrado",
+            sSearch: "Pesquisar",
+            oPaginate: {
+                sNext: "Próximo",
+                sPrevious: "Anterior",
+                sFirst: "Primeiro",
+                sLast: "Último"
+            },
+            oAria: {
+                sSortAscending: ": Ordenar colunas de forma ascendente",
+                sSortDescending: ": Ordenar colunas de forma descendente"
+            }
+        }
+    });
+});
+
+
+
 
         function inicializarGraficos() {
         // Gráfico de Ordens

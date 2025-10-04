@@ -15,6 +15,11 @@ public class Manutencao implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Cliente dono da manutenção
+    @ManyToOne
+    @JoinColumn(name = "cliente_id") // chave estrangeira no banco
+    private Cliente cliente;
+
     // Veículo que receberá a manutenção
     @ManyToOne
     @JoinColumn(name = "veiculo_id")
@@ -43,6 +48,9 @@ public class Manutencao implements Serializable {
     // --- GETTERS E SETTERS ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public Cliente getCliente() { return cliente; }
+    public void setCliente(Cliente cliente) { this.cliente = cliente; }
 
     public Veiculo getVeiculo() { return veiculo; }
     public void setVeiculo(Veiculo veiculo) { this.veiculo = veiculo; }
