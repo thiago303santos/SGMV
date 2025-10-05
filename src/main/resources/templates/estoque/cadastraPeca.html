@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/_head :: head}"></head>
+<body class="has-navbar">
+
+<!-- Navbar -->
+<div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Cadastrar Nova Peça</h2>
+
+    <form th:action="@{/estoque/salvar}" th:object="${peca}" method="post" class="row g-3">
+
+        <!-- Nome da Peça -->
+        <div class="col-md-6">
+            <label class="form-label">Nome da Peça</label>
+            <input type="text" class="form-control" th:field="*{nomePeca}" placeholder="Digite o nome da peça">
+            <div class="text-danger" th:if="${#fields.hasErrors('nomePeca')}" 
+                 th:each="err : ${#fields.errors('nomePeca')}" th:text="${err}"></div>
+        </div>
+
+        <!-- Fabricante -->
+        <div class="col-md-6">
+            <label class="form-label">Fabricante</label>
+            <input type="text" class="form-control" th:field="*{fabricante}" placeholder="Fabricante">
+            <div class="text-danger" th:if="${#fields.hasErrors('fabricante')}" 
+                 th:each="err : ${#fields.errors('fabricante')}" th:text="${err}"></div>
+        </div>
+
+        <!-- Quantidade -->
+        <div class="col-md-4">
+            <label class="form-label">Quantidade</label>
+            <input type="number" class="form-control" th:field="*{quantidade}" min="0">
+            <div class="text-danger" th:if="${#fields.hasErrors('quantidade')}" 
+                 th:each="err : ${#fields.errors('quantidade')}" th:text="${err}"></div>
+        </div>
+
+        <!-- Número de Série -->
+        <div class="col-md-4">
+            <label class="form-label">Número de Série</label>
+            <input type="text" class="form-control" th:field="*{nrSerie}">
+        </div>
+
+        <!-- Valor Custo -->
+        <div class="col-md-4">
+            <label class="form-label">Valor de Custo</label>
+            <input type="number" step="0.01" class="form-control" th:field="*{vlCusto}">
+        </div>
+
+        <!-- Valor Venda -->
+        <div class="col-md-4">
+            <label class="form-label">Valor de Venda</label>
+            <input type="number" step="0.01" class="form-control" th:field="*{vlVenda}">
+        </div>
+
+        <!-- Botões -->
+        <div class="col-12 mt-4">
+            <button type="submit" class="btn btn-success">Salvar Peça</button>
+            <a th:href="@{/estoque/lista}" class="btn btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+</div>
+
+<!-- Scripts -->
+<div th:replace="~{fragments/_scripts :: scripts}"></div>
+</body>
+</html>

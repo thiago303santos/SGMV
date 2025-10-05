@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Cadastrar Ordem de Serviço</title>
-    <link rel="stylesheet" th:href="@{/lib/bootstrap/css/bootstrap.min.css}" />
-    <script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
-    <script>
-        function toggleClienteNovo() {
-            const isNovo = document.getElementById("clienteNovo").checked;
-            document.getElementById("clienteExistenteDiv").style.display = isNovo ? "none" : "block";
-            document.getElementById("novoClienteDiv").style.display = isNovo ? "block" : "none";
-        }
-    </script>
-</head>
-<body class="container mt-4">
-<div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
+<head th:replace="~{fragments/_head :: head}"></head>
+<body class="chas-navbar">
+    <div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
+<script>
+    function toggleClienteNovo() {
+        const isNovo = document.getElementById("clienteNovo").checked;
+        document.getElementById("clienteExistenteDiv").style.display = isNovo ? "none" : "block";
+        document.getElementById("novoClienteDiv").style.display = isNovo ? "block" : "none";
+    }
+</script>
 
+<div class="container mt-5">
     <h2 class="mb-4">Cadastrar Ordem de Serviço</h2>
 
     <form th:action="@{/manutencao/salvar}" method="post" class="row g-3">
@@ -135,6 +131,7 @@
             <a th:href="@{/manutencao/lista}" class="btn btn-secondary">Cancelar</a>
         </div>
     </form>
+</div>    
     <script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

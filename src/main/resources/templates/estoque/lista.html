@@ -1,0 +1,110 @@
+<!-- templates/estoque/lista.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/_head :: head}"></head>
+<body class="has-navbar">
+
+<!-- Navbar -->
+<div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">Gerenciamento de Estoque</h2>
+        <a class="btn btn-primary btn-lg shadow-sm" th:href="@{/estoque/novo}">
+            <i class="bi bi-plus-circle me-1"></i> Nova Peça
+        </a>
+    </div>
+
+    <!-- Tabela DataTable -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <table id="tabelaPecas" class="table table-hover table-bordered align-middle w-100">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Fabricante</th>
+                        <th>Nº Série</th>
+                        <th>Quantidade</th>
+                        <th>Custo (R$)</th>
+                        <th>Venda (R$)</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<div th:replace="~{fragments/_scripts :: scripts}"></div>
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#tabelaPecas').DataTable({
+        ajax: {
+            url: '/estoque/listar',
+            dataSrc: ''
+        },
+        columns: [
+            { data: 'idPeca' },
+            { data: 'nomePeca' },
+            { data: 'fabricante' },
+            { data: 'nrSerie' },
+            { data: 'quantidade' },
+            { data: 'vlCusto',
+              render: function (data) { return data ? "R$ " + parseFloat(data).toFixed(2) : ""; }
+            },
+            { data: 'vlVenda',
+              render: function (data) { return data ? "R$ " + parseFloat(data).toFixed(2) : ""; }
+            },
+            {
+                data: null,
+                orderable: false,
+                className: "text-center",
+                render: function (data, type, row) {
+                    return `
+                        <a href="/estoque/editar/${row.idPeca}" 
+                           class="btn btn-sm btn-edit" 
+                           title="Editar">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <a href="/estoque/deletar/${row.idPeca}" 
+                           class="btn btn-sm btn-delete" 
+                           onclick="return confirm('Deseja realmente excluir esta peça?')" 
+                           title="Excluir">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>`;
+                }
+            }
+        ],
+        responsive: true,
+        language: {
+            sEmptyTable: "Nenhum registro encontrado",
+            sInfo: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            sInfoEmpty: "Mostrando 0 até 0 de 0 registros",
+            sInfoFiltered: "(Filtrados de _MAX_ registros)",
+            sLengthMenu: "_MENU_ resultados por página",
+            sLoadingRecords: "Carregando...",
+            sProcessing: "Processando...",
+            sZeroRecords: "Nenhum registro encontrado",
+            sSearch: "Pesquisar:",
+            oPaginate: {
+                sNext: "Próximo",
+                sPrevious: "Anterior",
+                sFirst: "Primeiro",
+                sLast: "Último"
+            },
+            oAria: {
+                sSortAscending: ": Ordenar colunas de forma ascendente",
+                sSortDescending: ": Ordenar colunas de forma descendente"
+            }
+        },
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+});
+</script>
+
+</body>
+</html>
