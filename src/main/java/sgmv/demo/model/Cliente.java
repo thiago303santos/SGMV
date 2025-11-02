@@ -1,5 +1,6 @@
 package sgmv.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class Cliente implements Serializable {
     private String telefoneCliente;
     private String emailCliente;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Veiculo> veiculos = new ArrayList<>();
 

@@ -1,9 +1,11 @@
 package sgmv.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects; // <-- Verifique este import
 
 @Entity
 @Table(name = "tb_tipo_veiculo")
@@ -15,6 +17,7 @@ public class TipoVeiculo implements Serializable {
 
     private String tipoVeiculo;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tipo")
     private List<Veiculo> veiculos = new ArrayList<>();
 
@@ -27,4 +30,20 @@ public class TipoVeiculo implements Serializable {
 
     public List<Veiculo> getVeiculos() { return veiculos; }
     public void setVeiculos(List<Veiculo> veiculos) { this.veiculos = veiculos; }
+
+    //
+    // ESTES SÃO OS MÉTODOS CRÍTICOS
+    //
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TipoVeiculo that = (TipoVeiculo) o;
+        return Objects.equals(idTipoVeiculo, that.idTipoVeiculo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idTipoVeiculo);
+    }
 }
