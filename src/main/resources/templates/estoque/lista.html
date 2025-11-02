@@ -11,21 +11,24 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="fw-bold">Gerenciamento de Estoque</h2>
         <a class="btn btn-primary btn-lg shadow-sm" th:href="@{/estoque/novo}">
-            <i class="bi bi-plus-circle me-1"></i> Nova Peça
+            <i class="bi bi-plus-circle me-1"></i> Novo Produto
         </a>
     </div>
 
     <!-- Tabela DataTable -->
     <div class="card shadow-sm border-0">
         <div class="card-body">
-            <table id="tabelaPecas" class="table table-hover table-bordered align-middle w-100">
+            <table id="tabelaProdutos" class="table table-hover table-bordered align-middle w-100">
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
                         <th>Fabricante</th>
+                        <th>Código de Barras</th>
                         <th>Nº Série</th>
                         <th>Quantidade</th>
+                        <th>Unidade</th>
+                        <th>Categoria</th>
                         <th>Custo (R$)</th>
                         <th>Venda (R$)</th>
                         <th class="text-center">Ações</th>
@@ -41,21 +44,30 @@
 <div th:replace="~{fragments/_scripts :: scripts}"></div>
 <script type="text/javascript">
 $(document).ready(function () {
-    $('#tabelaPecas').DataTable({
+    $('#tabelaProdutos').DataTable({
         ajax: {
             url: '/estoque/listar',
             dataSrc: ''
         },
         columns: [
-            { data: 'idPeca' },
-            { data: 'nomePeca' },
+            { data: 'idProduto' },
+            { data: 'nomeProduto' },
             { data: 'fabricante' },
-            { data: 'nrSerie' },
+            { data: 'codigoBarras' },
+            { data: 'numeroSerie' },
             { data: 'quantidade' },
-            { data: 'vlCusto',
+            { data: 'unidadeMedida',
+              render: function (data) {
+                  return data ? data.sigla || data : '';
+              }
+            },
+            { data: 'categoria.nomeCategoria',
+              defaultContent: ''
+            },
+            { data: 'valorCusto',
               render: function (data) { return data ? "R$ " + parseFloat(data).toFixed(2) : ""; }
             },
-            { data: 'vlVenda',
+            { data: 'valorVenda',
               render: function (data) { return data ? "R$ " + parseFloat(data).toFixed(2) : ""; }
             },
             {
@@ -64,14 +76,14 @@ $(document).ready(function () {
                 className: "text-center",
                 render: function (data, type, row) {
                     return `
-                        <a href="/estoque/editar/${row.idPeca}" 
+                        <a href="/estoque/editar/${row.idProduto}" 
                            class="btn btn-sm btn-edit" 
                            title="Editar">
                             <i class="bi bi-pencil-fill"></i>
                         </a>
-                        <a href="/estoque/deletar/${row.idPeca}" 
+                        <a href="/estoque/deletar/${row.idProduto}" 
                            class="btn btn-sm btn-delete" 
-                           onclick="return confirm('Deseja realmente excluir esta peça?')" 
+                           onclick="return confirm('Deseja realmente excluir este produto?')" 
                            title="Excluir">
                             <i class="bi bi-trash-fill"></i>
                         </a>`;
