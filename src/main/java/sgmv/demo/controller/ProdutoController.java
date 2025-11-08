@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import sgmv.demo.dto.ProdutoDTO;
 import sgmv.demo.model.Produto;
 import sgmv.demo.model.enums.UnidadeMedida;
 import sgmv.demo.repository.ProdutoRepository;
@@ -29,9 +31,19 @@ public class ProdutoController {
 
     @ResponseBody
     @GetMapping("/listar")
-    public List<Produto> listarProdutos() {
-        return produtoRepository.findAll();
+    public List<ProdutoDTO> listarProdutos() {
+        return produtoRepository.findAll().stream()
+            .map(p -> new ProdutoDTO(
+                p.getIdProduto(),
+                p.getNomeProduto(),
+                p.getCategoria() != null ? p.getCategoria().getNomeCategoria() : "",
+                p.getUnidadeMedida() != null ? p.getUnidadeMedida().name() : "",
+                p.getQuantidade(),
+                p.getValorVenda()
+            ))
+            .toList();
     }
+
 
     @GetMapping("/novo")
     public String novoProduto(Model model) {

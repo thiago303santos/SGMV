@@ -1,12 +1,11 @@
 <div th:fragment="scripts">
-    <!-- jQuery (antes de tudo que depende dele) -->
+    <!-- jQuery -->
     <script th:src="@{/lib/jquery/jquery.min.js}"></script>
 
     <!-- Bootstrap (bundle já inclui Popper.js) -->
     <script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Plugins extras -->
+    <!-- Plugins -->
     <script th:src="@{/lib/jquery-ui.min.js}"></script>
     <script th:src="@{/lib/jquery-mask/jquery.mask.min.js}"></script>
 
@@ -23,6 +22,7 @@
     <script th:src="@{/lib/datatables/vfs_fonts.js}"></script>
     <script th:src="@{/lib/datatables/buttons.html5.min.js}"></script>
     <script th:src="@{/lib/datatables/buttons.print.min.js}"></script>
-    <!-- Chart.js (adicione se não tiver local, pode usar CDN) -->
+
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </div>
