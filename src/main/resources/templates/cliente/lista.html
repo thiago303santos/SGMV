@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/_head :: head}"></head>
+<body>
+<div th:replace="~{fragments/_navbar :: navbar(null, ${usuarioNome})}"></div>
+
+<div class="container mt-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">Gerenciamento de Clientes</h2>
+        <a class="btn btn-primary btn-lg shadow-sm" th:href="@{/clientes/novo}">
+             Novo Cliente
+        </a>
+    </div>
+
+    <div th:if="${sucesso}" class="alert alert-success" role="alert" th:text="${sucesso}"></div>
+    <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <table id="tabelaClientes" class="table table-hover table-bordered align-middle w-100">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody> 
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/_scripts :: scripts}"></div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#tabelaClientes').DataTable({
+        ajax: {
+            url: '/clientes/listar', // Endpoint [JSON]
+            dataSrc: ''
+        },
+        columns: [
+            { data: 'idCliente' },
+            { data: 'nomeCliente' },
+            { data: 'cpfCliente' },
+            { data: 'telefoneCliente' },
+            { data: 'emailCliente' },
+            {
+                data: null,
+                orderable: false,
+                className: "text-center",
+                render: function (data, type, row) {
+                    return `
+                        <a href="/clientes/editar/${row.idCliente}" 
+                           class="btn btn-sm btn-outline-warning me-1" 
+                           title="Editar">
+                            Editar
+                        </a>
+                        <a href="/clientes/excluir/${row.idCliente}" 
+                           class="btn btn-sm btn-outline-danger" 
+                           onclick="return confirm('Deseja realmente excluir este cliente? (Isso pode falhar se ele tiver veículos ou O.S. vinculadas).')" 
+                           title="Excluir">
+                            Excluir
+                        </a>`;
+                }
+            }
+        ],
+        responsive: true,
+        language: {
+            sEmptyTable: "Nenhum registro encontrado",
+            sInfo: "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            sInfoEmpty: "Mostrando 0 até 0 de 0 registros",
+            sInfoFiltered: "(Filtrados de _MAX_ registros)",
+            sLengthMenu: "_MENU_ resultados por página",
+            sLoadingRecords: "Carregando...",
+            sProcessing: "Processando...",
+            sZeroRecords: "Nenhum registro encontrado",
+            sSearch: "Pesquisar:",
+            oPaginate: {
+                sNext: "Próximo",
+                sPrevious: "Anterior",
+                sFirst: "Primeiro",
+                sLast: "Último"
+            }
+        },
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+});
+</script>
+</body>
+</html>

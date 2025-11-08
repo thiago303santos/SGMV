@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/_head :: head}"></head>
+<body>
+<div th:replace="~{fragments/_navbar :: navbar(null, ${usuarioNome})}"></div>
+
+<div class="container mt-5">
+
+    <h2 th:text="${veiculo.idVeiculo == null ? 'Novo Veículo' : 'Editar Veículo'}"></h2>
+    <hr>
+
+    <div th:if="${sucesso}" class="alert alert-success" role="alert" th:text="${sucesso}"></div>
+    <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+
+    <form th:action="@{/veiculos/salvar}" th:object="${veiculo}" method="post">
+        <input type="hidden" th:field="*{idVeiculo}"/>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Proprietário (Cliente)</label>
+                <select th:field="*{cliente}" class="form-select" required>
+                    <option value="">-- Selecione um Cliente --</option>
+                    <option th:each="cli : ${listaClientes}" 
+                            th:value="${cli.idCliente}" 
+                            th:text="${cli.nomeCliente}"></option>
+                </select>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Tipo de Veículo</label>
+                 <select th:field="*{tipo}" class="form-select" required>
+                    <option value="">-- Selecione um Tipo --</option>
+                    <option th:each="t : ${listaTipos}" 
+                            th:value="${t.idTipoVeiculo}" 
+                            th:text="${t.tipoVeiculo}"></option> 
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Placa</label>
+                <input type="text" th:field="*{placa}" id="placa" class="form-control" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Marca</label>
+                <input type="text" th:field="*{marca}" class="form-control">
+            </div>
+             <div class="col-md-4 mb-3">
+                <label class="form-label">Modelo</label>
+                <input type="text" th:field="*{modelo}" class="form-control" required>
+            </div>
+        </div>
+        
+         <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Ano</label>
+                <input type="text" th:field="*{ano}" id="ano" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Cor</label>
+                <input type="text" th:field="*{cor}" class="form-control">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a th:href="@{/veiculos}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<div th:replace="~{fragments/_scripts :: scripts}"></div>
+
+<script>
+    $(document).ready(function(){
+        $('#placa').mask('AAA-0A00');
+        $('#ano').mask('0000/0000');
+    });
+</script>
+</body>
+</html>
