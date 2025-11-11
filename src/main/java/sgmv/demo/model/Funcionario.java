@@ -15,6 +15,12 @@ public class Funcionario implements Serializable {
 
     private String nomeFuncionario;
     private String especialidade;
+    
+    // NOVO RELACIONAMENTO 1:1: Mapeia o Funcionário para uma conta de Usuário (login)
+    // Opcional, pois pode haver funcionários sem login no sistema.
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", unique = true) // Chave estrangeira fica na tabela tb_funcionario
+    private Usuario contaUsuario; 
 
     @OneToMany(mappedBy = "funcionario")
     private List<Manutencao> manutencoes = new ArrayList<>();
@@ -31,4 +37,8 @@ public class Funcionario implements Serializable {
 
     public List<Manutencao> getManutencoes() { return manutencoes; }
     public void setManutencoes(List<Manutencao> manutencoes) { this.manutencoes = manutencoes; }
+    
+    // NOVO GETTER/SETTER:
+    public Usuario getContaUsuario() { return contaUsuario; }
+    public void setContaUsuario(Usuario contaUsuario) { this.contaUsuario = contaUsuario; }
 }

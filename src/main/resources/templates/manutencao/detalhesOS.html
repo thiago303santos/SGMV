@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/_head :: head}"></head>
+<body class="has-navbar">
+
+<div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
+
+<div class="container mt-4">
+
+    <!-- Debug temporário -->
+    <!-- <pre th:text="${#lists.size(manutencaoDTO.pecas)}"></pre> -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <h2 class="fw-bold text-dark" th:text="'Detalhes da Ordem de Serviço #' + ${manutencaoDTO.id}"></h2>
+
+        <div>
+            <a class="btn btn-outline-secondary me-2" th:href="@{/manutencao/lista/}">
+                <i class="bi bi-arrow-left"></i> Voltar
+            </a>
+            <button class="btn btn-info text-white"
+                    th:onclick="|window.open('/manutencao/imprimir/' + ${manutencaoDTO.id}, '_blank')|">
+                <i class="bi bi-printer-fill"></i> Imprimir OS
+            </button>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-light shadow-sm border-start border-primary border-4">
+                <div class="card-body py-2">
+                    <p class="mb-0 text-muted small">Data Entrada</p>
+                    <h5 class="fw-bold" th:text="${#temporals.format(manutencaoDTO.dataEntrada, 'dd/MM/yyyy')}"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-light shadow-sm border-start border-success border-4">
+                <div class="card-body py-2">
+                    <p class="mb-0 text-muted small">Data Conclusão</p>
+                    <h5 class="fw-bold" th:text="${#temporals.format(manutencaoDTO.dataEntrega, 'dd/MM/yyyy')}"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-light shadow-sm border-start border-info border-4">
+                <div class="card-body py-2">
+                    <p class="mb-0 text-muted small">Status</p>
+                    <h5 class="fw-bold text-info" th:text="${manutencaoDTO.status}"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-light shadow-sm border-start border-warning border-4">
+                <div class="card-body py-2">
+                    <p class="mb-0 text-muted small">Profissional Executor</p>
+                    <h5 class="fw-bold" th:text="${manutencaoDTO.profissional}"></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white"><i class="bi bi-person-circle"></i> Dados do Cliente</div>
+                <div class="card-body">
+                    <p><strong>Nome:</strong> <span th:text="${manutencaoDTO.nomeCliente}"></span></p>
+                    <p><strong>CPF:</strong> <span th:text="${manutencaoDTO.cpfCliente}"></span></p>
+                    <p><strong>Celular:</strong> <span th:text="${manutencaoDTO.telefoneCliente}"></span></p>
+                    <p><strong>E-mail:</strong> <span th:text="${manutencaoDTO.emailCliente}"></span></p>
+                    <p><strong>Endereço:</strong>
+                        <span th:text="${manutencaoDTO.enderecoCliente}"></span>,
+                        <span th:text="${manutencaoDTO.bairroCliente}"></span> -
+                        <span th:text="${manutencaoDTO.cidadeCliente}"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white"><i class="bi bi-car-front-fill"></i> Dados do Veículo</div>
+                <div class="card-body">
+                    <p><strong>Marca/Modelo:</strong> <span th:text="${manutencaoDTO.marca}"></span> / <span th:text="${manutencaoDTO.modelo}"></span></p>
+                    <p><strong>Placa:</strong> <span class="badge bg-secondary fs-6" th:text="${manutencaoDTO.placa}"></span></p>
+                    <p><strong>Ano/Cor:</strong> <span th:text="${manutencaoDTO.ano}"></span> / <span th:text="${manutencaoDTO.cor}"></span></p>
+                    <p><strong>Chassi:</strong> <span th:text="${manutencaoDTO.chassi}"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-secondary text-white"><i class="bi bi-list-check"></i> Detalhes da Manutenção</div>
+        <div class="card-body">
+            <h5 class="mt-2 mb-3 fw-bold">1. Serviços (Mão de Obra)</h5>
+            <table class="table table-sm table-bordered table-striped">
+                <thead class="table-light">
+                <tr>
+                    <th>Descrição</th>
+                    <th class="text-center">Qt</th>
+                    <th class="text-end">Val. Unit. (R$)</th>
+                    <th class="text-end">Val. Total (R$)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="servico : ${manutencaoDTO.servicos}">
+                    <td th:text="${servico.descricao}">Serviço</td>
+                    <td class="text-center" th:text="${servico.quantidade}"></td>
+                    <td class="text-end" th:text="${#numbers.formatDecimal(servico.valorUnitario, 2, 'COMMA', 2, 'POINT')}"></td>
+                    <td class="text-end" th:text="${#numbers.formatDecimal(servico.valorTotal, 2, 'COMMA', 2, 'POINT')}"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr class="table-primary fw-bold">
+                    <td colspan="3" class="text-end">Total Serviços</td>
+                    <td class="text-end" th:text="${#numbers.formatDecimal(manutencaoDTO.totalServicos, 2, 'COMMA', 2, 'POINT')}"></td>
+                </tr>
+                </tfoot>
+            </table>
+
+            <h5 class="mt-4 mb-3 fw-bold">2. Peças</h5>
+            <table class="table table-sm table-bordered table-striped">
+                <thead class="table-light">
+                <tr>
+                    <th>Descrição</th>
+                    <th class="text-center">Unidade</th>
+                    <th class="text-center">Qt</th>
+                    <th class="text-end">Val. Unit. (R$)</th>
+                    <th class="text-end">Val. Total (R$)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="peca : ${manutencaoDTO.pecas}">
+                    <td th:text="${peca.nomeProduto}"></td>
+                    <td class="text-center" th:text="${peca.unidade}"></td>
+                    <td class="text-center" th:text="${peca.quantidade}"></td>
+                    <td class="text-end" th:text="${#numbers.formatDecimal(peca.valorUnitario, 2, 'COMMA', 2, 'POINT')}"></td>
+                    <td class="text-end" th:text="${#numbers.formatDecimal(peca.valorTotal, 2, 'COMMA', 2, 'POINT')}"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr class="table-primary fw-bold">
+                    <td colspan="4" class="text-end">Total Peças</td>
+                    <td class="text-end" th:text="${#numbers.formatDecimal(manutencaoDTO.totalPecas, 2, 'COMMA', 2, 'POINT')}"></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="row justify-content-end mb-5">
+        <div class="col-md-4">
+            <div class="card bg-success text-white shadow-lg">
+                <div class="card-body text-center">
+                    <h4 class="mb-0">TOTAL GERAL DA OS</h4>
+                    <h2 class="fw-bold" th:text="'R$ ' + ${#numbers.formatDecimal(manutencaoDTO.vlTotal, 2, 'COMMA', 2, 'POINT')}"></h2>
+                    <small class="text-white-50">Soma de Serviços e Peças</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/_scripts :: scripts}"></div>
+<script th:inline="javascript">
+    function printOS(id) {
+        window.open('/manutencao/imprimir/' + id, '_blank');
+    }
+</script>
+</body>
+</html>

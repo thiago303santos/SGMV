@@ -1,137 +1,297 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/_head :: head}"></head>
-<body class="chas-navbar">
+<body class="has-navbar"> 
     <div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
-<script>
+
+    <script>
+        // Função JS mantida
+        function toggleClienteNovo() {
+            const isNovo = document.getElementById("clienteNovo").checked;
+            document.getElementById("clienteExistenteCard").style.display = isNovo ? "none" : "block";
+            document.getElementById("novoClienteCard").style.display = isNovo ? "block" : "none";
+            document.getElementById("veiculoNovoDiv").style.display = isNovo ? "block" : "none";
+            document.getElementById("veiculoExistenteDiv").style.display = isNovo ? "none" : "block";
+        }
+    </script>
+
+    <div class="container mt-5">
+        <h2 class="fw-bold mb-4 text-primary">
+            <i class="bi bi-tools me-2"></i> Nova Ordem de Serviço
+        </h2>
+
+        <form th:action="@{/manutencao/salvar}" method="post" th:object="${manutencaoDTO}" class="row g-4">
+
+            <div class="col-12 mb-3">
+                <div class="d-flex align-items-center">
+                    <h4 class="mb-0 me-3">Selecione o Cliente</h4>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="clienteNovo" onclick="toggleClienteNovo()">
+                        <label class="form-check-label fw-bold" for="clienteNovo">Cadastrar novo cliente/veículo</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                
+                <div class="col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-primary text-white">
+                            <i class="bi bi-person-circle me-1"></i> Dados do Cliente
+                        </div>
+                        <div class="card-body">
+                            
+                            <div id="clienteExistenteCard">
+                                <label for="idCliente" class="form-label">Cliente Existente</label>
+                                <select th:field="*{idCliente}" id="idCliente" class="form-select" disabled>
+                                    <option value="">-- Selecione o Cliente --</option>
+                                    <option th:each="cliente : ${clientes}"
+                                            th:value="${cliente.idCliente}"
+                                            th:text="${cliente.nomeCliente}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div id="novoClienteCard" style="display:none;">
+                                <div class="row g-2">
+                                    <div class="col-12 mb-2">
+                                        <label class="form-label">Nome Completo</label>
+                                        <input type="text" class="form-control" th:field="*{nomeCliente}" placeholder="Nome">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">CPF</label>
+                                        <input type="text" class="form-control" th:field="*{cpfCliente}" placeholder="CPF">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Telefone</label>
+                                        <input type="text" class="form-control" th:field="*{telefoneCliente}" placeholder="(XX) XXXXX-XXXX">
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <label class="form-label">E-mail</label>
+                                        <input type="email" class="form-control" th:field="*{emailCliente}" placeholder="email@exemplo.com">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-info text-white">
+                            <i class="bi bi-car-front-fill me-1"></i> Dados do Veículo
+                        </div>
+                        <div class="card-body">
+                            
+                            <div id="veiculoExistenteDiv">
+                                <label for="idVeiculo" class="form-label">Veículo Existente</label>
+                                <select th:field="*{idVeiculo}" id="idVeiculo" class="form-select" disabled>
+                                    <option value="">-- Selecione o Veículo --</option>
+                                    </select>
+                                <small class="text-muted d-block mt-2">Se o veículo não estiver na lista, cadastre um novo cliente/veículo.</small>
+                            </div>
+
+                            <div id="veiculoNovoDiv" style="display:none;">
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Placa</label>
+                                        <input type="text" class="form-control" th:field="*{placa}" placeholder="ABC-1234">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Marca</label>
+                                        <input type="text" class="form-control" th:field="*{marca}" placeholder="Marca">
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <label class="form-label">Modelo</label>
+                                        <input type="text" class="form-control" th:field="*{modelo}" placeholder="Modelo">
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <label class="form-label">Tipo</label>
+                                        <select class="form-select" th:field="*{tipoId}">
+                                            <option value="">-- Tipo --</option>
+                                            <option th:each="tipo : ${tiposVeiculos}" 
+                                                    th:value="${tipo.idTipoVeiculo}" 
+                                                    th:text="${tipo.tipoVeiculo}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <label class="form-label">Ano</label>
+                                        <input type="text" class="form-control" th:field="*{ano}" placeholder="Ano">
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <label class="form-label">Cor</label>
+                                        <input type="text" class="form-control" th:field="*{cor}" placeholder="Cor">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <i class="bi bi-journal-text me-1"></i> Detalhes da Ordem de Serviço
+                    </div>
+                    <div class="card-body row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Data de Entrada</label>
+                            <input type="date" class="form-control" th:field="*{dataEntrada}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Quilometragem (Km)</label>
+                            <input type="text" class="form-control" th:field="*{quilometragem}" placeholder="Ex: 150000">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" th:field="*{status}" required>
+                                <option value="ABERTA">Aberta</option>
+                                <option value="EM_ANDAMENTO">Em Andamento</option>
+                                <option value="CONCLUIDA">Concluída</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Descrição do Problema/Serviço Solicitado</label>
+                            <textarea class="form-control" rows="3" th:field="*{descricao}" placeholder="Descreva os serviços ou problemas relatados pelo cliente..."></textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Valor Total Estimado (R$)</label>
+                            <input type="number" step="0.01" class="form-control" th:field="*{vlTotal}" value="0.00">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 mt-4 text-end">
+                <a th:href="@{/manutencao/lista}" class="btn btn-outline-secondary me-2">Cancelar</a>
+                <button type="submit" class="btn btn-success btn-lg shadow">
+                    <i class="bi bi-save-fill me-1"></i> Salvar Ordem de Serviço
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <script>
+    // Função toggleClienteNovo atualizada para manipular 'disabled' e 'required'
     function toggleClienteNovo() {
         const isNovo = document.getElementById("clienteNovo").checked;
-        document.getElementById("clienteExistenteDiv").style.display = isNovo ? "none" : "block";
-        document.getElementById("novoClienteDiv").style.display = isNovo ? "block" : "none";
+
+        // --- Campos de Cliente Existente ---
+        const idClienteSelect = document.getElementById("idCliente");
+        const idVeiculoSelect = document.getElementById("idVeiculo"); // Select de Veículo Existente
+
+        // --- Campos de Cliente Novo / Veículo Novo ---
+        const camposNovoCliente = document.querySelectorAll('#novoClienteCard input, #novoClienteCard select');
+        const camposNovoVeiculo = document.querySelectorAll('#veiculoNovoDiv input, #veiculoNovoDiv select');
+
+        // 1. Alternar Visibilidade dos Cards
+        document.getElementById("clienteExistenteCard").style.display = isNovo ? "none" : "block";
+        document.getElementById("novoClienteCard").style.display = isNovo ? "block" : "none";
+        document.getElementById("veiculoExistenteDiv").style.display = isNovo ? "none" : "block";
+        document.getElementById("veiculoNovoDiv").style.display = isNovo ? "block" : "none";
+
+        // 2. Manipular Atributos 'disabled' e 'required'
+
+        // Cenário NOVO
+        if (isNovo) {
+            // Desabilita campos EXISTENTES para que não sejam validados nem enviados
+            idClienteSelect.setAttribute('disabled', 'disabled');
+            idClienteSelect.removeAttribute('required');
+            
+            // DESABILITA E REMOVE REQUIRED do idVeiculo (para garantir que a validação não pegue ele)
+            idVeiculoSelect.setAttribute('disabled', 'disabled');
+            idVeiculoSelect.removeAttribute('required');
+
+
+            // Habilita e exige campos NOVOS
+            camposNovoCliente.forEach(el => { el.removeAttribute('disabled'); el.setAttribute('required', 'required'); });
+            camposNovoVeiculo.forEach(el => { el.removeAttribute('disabled'); el.setAttribute('required', 'required'); });
+        } 
+        // Cenário EXISTENTE
+        else {
+            // Habilita campos EXISTENTES (Cliente)
+            idClienteSelect.removeAttribute('disabled');
+            idClienteSelect.setAttribute('required', 'required'); 
+            
+            // Mantém o idVeiculo desabilitado por enquanto, mas REMOVE O REQUIRED. 
+            // Ele só será habilitado E terá o 'required' adicionado via AJAX no evento 'change'.
+            idVeiculoSelect.setAttribute('disabled', 'disabled');
+            idVeiculoSelect.removeAttribute('required'); 
+            
+            // Desabilita campos NOVOS para que não sejam validados
+            camposNovoCliente.forEach(el => { el.setAttribute('disabled', 'disabled'); el.removeAttribute('required'); });
+            camposNovoVeiculo.forEach(el => { el.setAttribute('disabled', 'disabled'); el.removeAttribute('required'); });
+            
+            // Se já houver um cliente selecionado ao trocar (ex: ao carregar a página), atualiza o veículo
+            if (idClienteSelect.value) {
+                // Força o trigger do evento change para carregar/validar o veículo
+                idClienteSelect.dispatchEvent(new Event('change'));
+            }
+        }
     }
+
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        
+        const clienteSelect = document.getElementById('idCliente');
+        const veiculoSelect = document.getElementById('idVeiculo');
+        
+        // Garante que o estado inicial (Existente ou Novo) esteja correto
+        toggleClienteNovo(); 
+
+        // Evento para carregar veículos quando um cliente é selecionado
+        clienteSelect.addEventListener('change', function() {
+            const clienteId = this.value;
+            
+            // LÓGICA DE HABILITAR/EXIGIR VEÍCULO CORRIGIDA:
+            if (clienteId) {
+                veiculoSelect.removeAttribute('disabled');
+                veiculoSelect.setAttribute('required', 'required'); // Torna obrigatório ao selecionar cliente
+            } else {
+                // Se deselecionar o cliente, desabilita o veículo e remove a obrigatoriedade
+                veiculoSelect.setAttribute('disabled', 'disabled');
+                veiculoSelect.removeAttribute('required');
+            }
+
+
+            // Limpa e exibe mensagem de carregamento
+            veiculoSelect.innerHTML = '<option value="">-- Carregando Veículos... --</option>';
+
+            if (clienteId) {
+                // URL CORRIGIDA: /clientes/ID_CLIENTE/veiculos
+                fetch(`/clientes/${clienteId}/veiculos`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erro na rede ou no servidor');
+                        }
+                        return response.json();
+                    })
+                    .then(veiculos => {
+                        veiculoSelect.innerHTML = '<option value="">-- Escolha --</option>';
+                        if (veiculos.length > 0) {
+                            veiculos.forEach(veiculo => {
+                                const option = document.createElement('option');
+                                option.value = veiculo.idVeiculo;
+                                option.textContent = `${veiculo.placa} - ${veiculo.modelo} (${veiculo.ano})`;
+                                veiculoSelect.appendChild(option);
+                            });
+                        } else {
+                            veiculoSelect.innerHTML = '<option value="">-- Cliente sem veículos cadastrados --</option>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar veículos:', error);
+                        veiculoSelect.innerHTML = '<option value="">-- Erro ao carregar veículos --</option>';
+                    });
+            } else {
+                veiculoSelect.innerHTML = '<option value="">-- Escolha --</option>';
+            }
+        });
+    });
 </script>
-
-<div class="container mt-5">
-    <h2 class="mb-4">Cadastrar Ordem de Serviço</h2>
-
-    <form th:action="@{/manutencao/salvar}" method="post" class="row g-3">
-
-        <!-- Escolher cliente existente OU novo -->
-        <div class="col-12">
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="clienteNovo" onclick="toggleClienteNovo()">
-                <label class="form-check-label" for="clienteNovo">Cadastrar novo cliente</label>
-            </div>
-        </div>
-
-        <!-- Cliente existente -->
-        <div id="clienteExistenteDiv" class="col-12">
-            <label for="idCliente" class="form-label">Selecione o Cliente</label>
-            <select name="idCliente" id="idCliente" class="form-select">
-                <option value="">-- Escolha --</option>
-                <option th:each="cliente : ${clientes}"
-                        th:value="${cliente.idCliente}"
-                        th:text="${cliente.nomeCliente}">
-                </option>
-            </select>
-
-            <label for="idVeiculo" class="form-label mt-3">Selecione o Veículo</label>
-            <select name="idVeiculo" id="idVeiculo" class="form-select">
-                <option value="">-- Escolha --</option>
-                <!-- Aqui você pode carregar dinamicamente os veículos via JS quando selecionar o cliente -->
-            </select>
-        </div>
-
-        <!-- Novo cliente -->
-        <div id="novoClienteDiv" class="col-12" style="display:none;">
-            <h5 class="mt-3">Dados do Cliente</h5>
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="form-label">Nome</label>
-                    <input type="text" class="form-control" name="nomeCliente">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">CPF</label>
-                    <input type="text" class="form-control" name="cpfCliente">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Telefone</label>
-                    <input type="text" class="form-control" name="telefoneCliente">
-                </div>
-                <div class="col-md-6 mt-2">
-                    <label class="form-label">E-mail</label>
-                    <input type="email" class="form-control" name="emailCliente">
-                </div>
-            </div>
-
-            <h5 class="mt-4">Dados do Veículo</h5>
-            <div class="row">
-                <div class="col-md-3">
-                    <label class="form-label">Placa</label>
-                    <input type="text" class="form-control" name="placa">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Modelo</label>
-                    <input type="text" class="form-control" name="modelo">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Ano</label>
-                    <input type="text" class="form-control" name="ano">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Cor</label>
-                    <input type="text" class="form-control" name="cor">
-                </div>
-                <div class="col-md-4 mt-2">
-                    <label class="form-label">Marca</label>
-                    <input type="text" class="form-control" name="marca">
-                </div>
-                <div class="col-md-4 mt-2">
-                    <label class="form-label">Tipo</label>
-                    <select class="form-select" name="tipoId">
-                        <option value="">-- Selecione --</option>
-                        <option th:each="tipo : ${tiposVeiculos}" 
-                                th:value="${tipo.idTipoVeiculo}" 
-                                th:text="${tipo.tipoVeiculo}"></option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dados da Manutenção -->
-        <h5 class="mt-4">Dados da Manutenção</h5>
-        <div class="col-md-4">
-            <label class="form-label">Data de Entrada</label>
-            <input type="date" class="form-control" name="dataEntrada">
-        </div>
-        <div class="col-md-4">
-            <label class="form-label">Quilometragem</label>
-            <input type="text" class="form-control" name="quilometragem">
-        </div>
-        <div class="col-md-12 mt-2">
-            <label class="form-label">Descrição</label>
-            <textarea class="form-control" rows="3" name="descricao"></textarea>
-        </div>
-        <div class="col-md-4 mt-2">
-            <label class="form-label">Status</label>
-            <select class="form-select" name="status">
-                <option value="ABERTA">Aberta</option>
-                <option value="EM_ANDAMENTO">Em Andamento</option>
-                <option value="CONCLUIDA">Concluída</option>
-            </select>
-        </div>
-        <div class="col-md-4 mt-2">
-            <label class="form-label">Valor Total</label>
-            <input type="number" step="0.01" class="form-control" name="vlTotal">
-        </div>
-
-        <!-- Botões -->
-        <div class="col-12 mt-4">
-            <button type="submit" class="btn btn-success">Salvar OS</button>
-            <a th:href="@{/manutencao/lista}" class="btn btn-secondary">Cancelar</a>
-        </div>
-    </form>
-</div>    
-    <script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

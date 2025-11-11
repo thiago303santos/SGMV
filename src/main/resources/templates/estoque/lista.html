@@ -1,37 +1,35 @@
-<!-- templates/estoque/lista.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/_head :: head}"></head>
 <body class="has-navbar">
 
-<!-- Navbar -->
 <div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="fw-bold">Gerenciamento de Estoque</h2>
-        <a class="btn btn-primary btn-lg shadow-sm" th:href="@{/estoque/novo}">
-            <i class="bi bi-plus-circle me-1"></i> Novo Produto
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <h2 class="fw-bold text-primary">
+            <i class="bi bi-boxes me-2"></i> Gerenciamento de Estoque
+        </h2>
+        <a class="btn btn-success btn-lg shadow" th:href="@{/estoque/novo}">
+            <i class="bi bi-plus-circle-fill me-1"></i> Novo Produto
         </a>
     </div>
 
-    <!-- Tabela DataTable -->
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
-            <table id="tabelaProdutos" class="table table-hover table-bordered align-middle w-100">
+    <div class="card shadow">
+        <div class="card-body p-3">
+            <table id="tabelaProdutos" class="table table-hover table-bordered align-middle w-100 nowrap">
                 <thead class="table-dark">
                     <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Fabricante</th>
-                        <th>Código de Barras</th>
-                        <th>Nº Série</th>
-                        <th>Quantidade</th>
-                        <th>Unidade</th>
-                        <th>Categoria</th>
-                        <th>Custo (R$)</th>
-                        <th>Venda (R$)</th>
-                        <th class="text-center">Ações</th>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">Nome</th>
+                        <th style="width: 15%;">Fabricante</th>
+                        <th style="width: 15%;">Categoria</th>
+                        <th style="width: 8%;" class="text-center">Qtd</th>
+                        <th style="width: 8%;" class="text-center">Unid.</th>
+                        <th style="width: 10%;" class="text-end">Custo (R$)</th>
+                        <th style="width: 10%;" class="text-end">Venda (R$)</th>
+                        <th style="width: 7%;" class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -40,9 +38,24 @@
     </div>
 </div>
 
-<!-- Scripts -->
 <div th:replace="~{fragments/_scripts :: scripts}"></div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
 <script type="text/javascript">
+// Função auxiliar para renderizar unidades (removendo siglas se necessário)
+function renderUnidade(data) {
+    if (!data) return '';
+    // Assume que a sigla ou nome da unidade vem no 'data' (do DTO)
+    return data.sigla ? data.sigla.toUpperCase() : String(data).toUpperCase();
+}
+
+// Função auxiliar para renderizar valores monetários
+function renderMoeda(data) {
+    if (data == null || data === "") return "R$ 0,00";
+    // Força a conversão para número e formata com vírgula para decimal
+    return "R$ " + parseFloat(data).toFixed(2).replace('.', ',');
+}
+
 $(document).ready(function () {
     $('#tabelaProdutos').DataTable({
         ajax: {
@@ -50,46 +63,67 @@ $(document).ready(function () {
             dataSrc: ''
         },
         columns: [
-            { data: 'idProduto' },
+            // ID
+            { data: 'idProduto', className: 'text-center' },
+            // Nome
             { data: 'nomeProduto' },
+            // Fabricante
             { data: 'fabricante' },
-            { data: 'codigoBarras' },
-            { data: 'numeroSerie' },
-            { data: 'quantidade' },
-            { data: 'unidadeMedida',
-              render: function (data) {
-                  return data ? data.sigla || data : '';
-              }
+            // Categoria (agora centralizada e simplificada)
+            { 
+                data: 'categoria.nomeCategoria',
+                defaultContent: 'N/A',
+                className: 'text-center' 
             },
-            { data: 'categoria.nomeCategoria',
-              defaultContent: ''
+            // Quantidade (agora centralizada e em destaque)
+            { 
+                data: 'quantidade',
+                className: 'text-center fw-bold' 
             },
-            { data: 'valorCusto',
-              render: function (data) { return data ? "R$ " + parseFloat(data).toFixed(2) : ""; }
+            // Unidade
+            { 
+                data: 'unidadeMedida',
+                render: renderUnidade,
+                className: 'text-center'
             },
-            { data: 'valorVenda',
-              render: function (data) { return data ? "R$ " + parseFloat(data).toFixed(2) : ""; }
+            // Valor Custo (agora alinhada à direita e formatada)
+            { 
+                data: 'valorCusto',
+                render: renderMoeda,
+                className: 'text-end text-muted' 
             },
+            // Valor Venda (agora alinhada à direita e formatada)
+            { 
+                data: 'valorVenda',
+                render: renderMoeda,
+                className: 'text-end fw-bold text-success' 
+            },
+            // Ações
             {
-                data: null,
+                data: 'idProduto', // Usa o ID para os links
                 orderable: false,
                 className: "text-center",
                 render: function (data, type, row) {
                     return `
-                        <a href="/estoque/editar/${row.idProduto}" 
-                           class="btn btn-sm btn-edit" 
-                           title="Editar">
-                            <i class="bi bi-pencil-fill"></i>
-                        </a>
-                        <a href="/estoque/deletar/${row.idProduto}" 
-                           class="btn btn-sm btn-delete" 
-                           onclick="return confirm('Deseja realmente excluir este produto?')" 
-                           title="Excluir">
-                            <i class="bi bi-trash-fill"></i>
-                        </a>`;
+                        <div class="btn-group" role="group">
+                            <a href="/estoque/editar/${data}" 
+                               class="btn btn-sm btn-outline-warning" 
+                               title="Editar">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <a href="/estoque/deletar/${data}" 
+                               class="btn btn-sm btn-outline-danger" 
+                               onclick="return confirm('Deseja realmente excluir este produto?')" 
+                               title="Excluir">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </div>`;
                 }
             }
         ],
+        // Ocultando colunas que não são tão essenciais (Código de Barras, Número de Série)
+        // O DataTables as oculta automaticamente com 'responsive: true', mas o mapeamento acima as omite da exibição padrão.
+        
         responsive: true,
         language: {
             sEmptyTable: "Nenhum registro encontrado",
@@ -117,6 +151,5 @@ $(document).ready(function () {
     });
 });
 </script>
-
 </body>
 </html>

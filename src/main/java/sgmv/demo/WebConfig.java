@@ -14,7 +14,29 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/home/**") // URLs protegidas
-                .excludePathPatterns("/", "/logarUsuario", "/css/**", "/js/**", "/images/**");
+                // URLs Protegidas (Exigem Login)
+                .addPathPatterns(
+                    "/home/**", 
+                    "/perfil/**",           // Novo: Perfil Pessoal
+                    "/admin/**",            // Novo: Painel Administrativo
+                    "/manutencao/**",       // Ex: lista, nova, peças
+                    "/estoque/**",          // Ex: lista, novo
+                    "/agendamentos/**",     // Ex: lista, novo
+                    "/clientes/**",
+                    "/veiculos/**"
+                ) 
+                // URLs Públicas (Não Exigem Login)
+                .excludePathPatterns(
+                    "/",                    // Landing Page
+                    "/login",               // Formulário de Login
+                    "/cadastro",            // Formulário de Cadastro
+                    "/logarUsuario",        // Submissão do Login
+                    "/cadastrarUsuario",    // Submissão do Cadastro
+                    "/logout",              // Logout (sempre deve ser acessível)
+                    "/css/**", 
+                    "/js/**", 
+                    "/images/**",
+                    "/lib/**"
+                );
     }
 }

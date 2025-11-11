@@ -12,6 +12,7 @@ import sgmv.demo.model.Cliente;
 import sgmv.demo.model.Veiculo; // 1. Importe o Veiculo
 import sgmv.demo.repository.ClientesRepository;
 import sgmv.demo.repository.VeiculosRepository; // 2. Importe o VeiculosRepository
+import sgmv.demo.dto.VeiculoDTO;
 
 import java.util.List;
 
@@ -131,12 +132,17 @@ public class ClienteController {
      */
     @GetMapping("/{id}/veiculos")
     @ResponseBody // <-- Retorna JSON
-    public ResponseEntity<List<Veiculo>> getVeiculosPorCliente(@PathVariable Long id) {
+    public ResponseEntity<List<VeiculoDTO>> getVeiculosPorCliente(@PathVariable Long id) {
         
-        // Esta linha usa o método que você adicionou no VeiculosRepository
+        // 1. Busca os veículos
         List<Veiculo> veiculos = veiculosRepository.findByClienteIdCliente(id);
         
-        // Retorna 200 OK com a lista de veículos (pode ser uma lista vazia)
-        return ResponseEntity.ok(veiculos);
+        // 2. Mapeia para DTO
+        List<VeiculoDTO> veiculosDTO = veiculos.stream()
+            .map(VeiculoDTO::new)
+            .toList();
+        
+        // Retorna 200 OK com a lista de DTOs
+        return ResponseEntity.ok(veiculosDTO);
     }
 }

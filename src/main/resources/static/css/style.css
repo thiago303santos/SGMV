@@ -107,6 +107,33 @@ body.has-navbar {
     border: 2px solid var(--accent-contrast);
 }
 
+.navbar .dropdown-menu {
+    /* Corrigir para usar o fundo ESCURO do seu tema, ignorando var(--surface) */
+    background: var(--primary-900); 
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4); 
+    min-width: 180px;
+    padding: 0.5rem 0;
+    border: 1px solid var(--primary-700);
+}
+
+.navbar .dropdown-item {
+    /* Garante que o texto seja CLARO por padrão */
+    color: var(--accent-contrast); 
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.navbar .dropdown-item:hover {
+    /* Sua regra de hover é ótima, só precisa ser mais específica se for necessário */
+    background: linear-gradient(90deg, var(--primary-700), var(--primary-500));
+    color: var(--accent-contrast);
+    border-radius: 6px;
+}
+
+.navbar .dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.15); 
+}
+
 /* ===== Login / Cards ===== */
 .login-card, .login-container {
     background: var(--surface);
@@ -304,3 +331,4 @@ body.has-navbar {
     font-weight: 600;
     font-size: 16px;
 }
+

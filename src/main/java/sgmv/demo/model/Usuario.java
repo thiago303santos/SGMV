@@ -21,7 +21,12 @@ public class Usuario implements Serializable {
     private String emailUsuario;
 
     private String senhaUsuario;
-    private int tipoUsuario; // 0 = ADMIN, 1 = FUNCIONARIO, 2 = GERENTE, etc.
+    // CORREÇÃO ESSENCIAL: De 'int' para 'Integer' para permitir valor nulo no formulário
+    private Integer tipoUsuario; // 0 = ADMIN, 1 = FUNCIONARIO, 2 = GERENTE, etc.
+
+    // NOVO RELACIONAMENTO: Mapeamento reverso para Funcionario (dados de profissional)
+    @OneToOne(mappedBy = "contaUsuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Funcionario dadosFuncionario;
 
     // Usuário pode criar/manter várias manutenções
     @OneToMany(mappedBy = "usuarioResponsavel")
@@ -46,9 +51,14 @@ public class Usuario implements Serializable {
     public String getSenhaUsuario() { return senhaUsuario; }
     public void setSenhaUsuario(String senhaUsuario) { this.senhaUsuario = senhaUsuario; }
 
-    public int getTipoUsuario() { return tipoUsuario; }
-    public void setTipoUsuario(int tipoUsuario) { this.tipoUsuario = tipoUsuario; }
+    // GETTER/SETTER ATUALIZADO PARA Integer
+    public Integer getTipoUsuario() { return tipoUsuario; } 
+    public void setTipoUsuario(Integer tipoUsuario) { this.tipoUsuario = tipoUsuario; } 
 
     public List<Manutencao> getManutencoes() { return manutencoes; }
     public void setManutencoes(List<Manutencao> manutencoes) { this.manutencoes = manutencoes; }
+    
+    // NOVO GETTER/SETTER:
+    public Funcionario getDadosFuncionario() { return dadosFuncionario; }
+    public void setDadosFuncionario(Funcionario dadosFuncionario) { this.dadosFuncionario = dadosFuncionario; }
 }

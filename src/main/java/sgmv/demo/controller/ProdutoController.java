@@ -36,14 +36,14 @@ public class ProdutoController {
             .map(p -> new ProdutoDTO(
                 p.getIdProduto(),
                 p.getNomeProduto(),
+                p.getFabricante(), // Correto: Agora mapeia o fabricante
                 p.getCategoria() != null ? p.getCategoria().getNomeCategoria() : "",
-                p.getUnidadeMedida() != null ? p.getUnidadeMedida().name() : "",
+                p.getUnidadeMedida() != null ? p.getUnidadeMedida().name() : "", // Correto: Mapeia o nome do ENUM
                 p.getQuantidade(),
                 p.getValorVenda()
             ))
             .toList();
     }
-
 
     @GetMapping("/novo")
     public String novoProduto(Model model) {

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/_head :: head}"></head>
+<body class="has-navbar">
+
+<div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4 pb-2 border-bottom text-primary">
+        <i class="bi bi-shield-lock-fill me-2"></i> Painel de Gerenciamento de Acesso
+    </h2>
+
+    <div class="card shadow">
+        <div class="card-header bg-light p-0">
+            <ul class="nav nav-tabs card-header-tabs" id="abasAcesso" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="usuarios-tab" data-bs-toggle="tab" data-bs-target="#usuarios" type="button" role="tab">
+                        <i class="bi bi-person-circle me-1"></i> Usuários do Sistema
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="funcionarios-tab" data-bs-toggle="tab" data-bs-target="#funcionarios" type="button" role="tab">
+                        <i class="bi bi-person-badge-fill me-1"></i> Funcionários (Mão de Obra)
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="niveis-tab" data-bs-toggle="tab" data-bs-target="#niveis" type="button" role="tab">
+                        <i class="bi bi-key-fill me-1"></i> Níveis de Acesso
+                    </button>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="card-body">
+            <div class="tab-content" id="abasAcessoContent">
+                
+                <div class="tab-pane fade show active" id="usuarios" role="tabpanel" aria-labelledby="usuarios-tab">
+                    <h4 class="mb-3">Contas de Acesso ao Sistema</h4>
+                    <a th:href="@{/admin/usuario/novo}" class="btn btn-sm btn-success mb-3">
+                        <i class="bi bi-plus-lg"></i> Novo Usuário
+                    </a>
+                    <table id="tabelaUsuarios" class="table table-striped table-hover w-100">
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="width: 5%;">ID</th>
+                                <th style="width: 25%;">Nome/Login</th>
+                                <th style="width: 25%;">E-mail</th>
+                                <th style="width: 25%;">Nível de Acesso</th>
+                                <th style="width: 20%;" class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane fade" id="funcionarios" role="tabpanel" aria-labelledby="funcionarios-tab">
+                    <h4 class="mb-3">Lista de Pessoal (Profissionais)</h4>
+                    <a th:href="@{/admin/funcionario/novo}" class="btn btn-sm btn-success mb-3">
+                        <i class="bi bi-plus-lg"></i> Novo Funcionário
+                    </a>
+                    <table id="tabelaFuncionarios" class="table table-striped table-hover w-100">
+                        <thead class="table-info">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Especialidade</th>
+                                <th>Documento</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                
+                <div class="tab-pane fade" id="niveis" role="tabpanel" aria-labelledby="niveis-tab">
+                    <h4 class="mb-3">Configuração de Perfis e Permissões</h4>
+                    <p class="alert alert-warning">Detalhes sobre as permissões que cada nível possui.</p>
+                    <table id="tabelaNiveis" class="table table-striped table-hover w-100">
+                        <thead class="table-warning">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome do Perfil</th>
+                                <th>Descrição/Permissões</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/_scripts :: scripts}"></div>
+<script>
+// --- JS e DATATABLES ---
+
+// 1. Função para carregar a Tabela de Usuários (CORRIGIDA)
+function carregarTabelaUsuarios() {
+    $('#tabelaUsuarios').DataTable({
+        destroy: true,
+        ajax: { url: '/admin/usuario/listar', dataSrc: '' },
+        columns: [
+            { data: 'idUsuario' },
+            // CORRIGIDO: Deve usar 'nomeUsuario' da DTO
+            { data: 'nomeUsuario' },
+            { data: 'emailUsuario' },
+            { 
+                // CORRIGIDO: Usa a propriedade 'nivelAcessoTexto' calculada na DTO
+                data: 'nivelAcessoTexto', 
+                render: (data) => {
+                    // Adiciona um badge simples para visualização
+                    const badgeClass = data.includes('Admin') ? 'bg-danger' : 'bg-primary';
+                    return `<span class="badge ${badgeClass}">${data}</span>`;
+                }
+            },
+            { 
+                data: 'idUsuario',
+                orderable: false,
+                className: 'text-center',
+                render: (id) => `
+                    <div class="btn-group">
+                        <a href="/admin/usuario/editar/${id}" class="btn btn-sm btn-warning" ><i class="bi bi-pencil-fill"></i>Editar</a>
+                        <a href="/admin/usuario/excluir/${id}" class="btn btn-sm btn-danger" onclick="return confirm('Confirmar exclusão?');">Excluir<i class="bi bi-trash-fill"></i></a>
+                    </div>
+                `
+            }
+        ]
+    });
+}
+
+// 2. Função para carregar a Tabela de Funcionários (CORRIGIDA)
+function carregarTabelaFuncionarios() {
+    $('#tabelaFuncionarios').DataTable({
+        destroy: true,
+        ajax: { url: '/admin/funcionario/listar', dataSrc: '' },
+        columns: [
+            { data: 'idFuncionario' },
+            // CORRIGIDO: Usa 'nomeFuncionario' da Entidade Funcionario
+            { data: 'nomeFuncionario' }, 
+            { data: 'especialidade' },
+            // Assumindo que você vai adicionar o campo 'documento' no Model Funcionario se for necessário
+            { data: 'documento', defaultContent: 'N/A' }, 
+            { 
+                data: 'idFuncionario',
+                orderable: false,
+                className: 'text-center',
+                render: (id) => `
+                    <div class="btn-group">
+                        <a href="/admin/funcionario/editar/${id}" class="btn btn-sm btn-warning">Editar<i class="bi bi-pencil-fill"></i></a>
+                    </div>
+                `
+            }
+        ]
+    });
+}
+
+// 3. Função para carregar a Tabela de Níveis de Acesso (NOVA)
+function carregarTabelaNiveis() {
+    $('#tabelaNiveis').DataTable({
+        destroy: true,
+        paging: false,
+        searching: false,
+        ajax: { url: '/admin/nivel/listar', dataSrc: '' },
+        columns: [
+            { data: 'id', className: 'text-center' },
+            { data: 'nome' },
+            { data: 'descricao' },
+            { 
+                data: 'id',
+                orderable: false,
+                className: 'text-center',
+                render: (id) => `
+                    <a href="/admin/nivel/editar/${id}" class="btn btn-sm btn-primary">Editar Permissões</a>
+                `
+            }
+        ]
+    });
+}
+
+
+// 4. Inicialização e Recarregamento das Abas
+$(document).ready(function() {
+    // Carrega a primeira aba por padrão
+    carregarTabelaUsuarios();
+    
+    // Configura o carregamento das outras abas apenas quando são ativadas
+    $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+        const targetId = $(e.target).attr("data-bs-target");
+        
+        if (targetId === '#funcionarios') {
+            carregarTabelaFuncionarios();
+        } else if (targetId === '#niveis') {
+            carregarTabelaNiveis();
+        }
+        
+    });
+});
+</script>
+</body>
+</html>

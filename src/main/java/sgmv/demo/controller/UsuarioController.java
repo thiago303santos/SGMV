@@ -102,7 +102,7 @@ public class UsuarioController {
     }
 
     // --- Páginas ---
-    @GetMapping("/")
+    @GetMapping("/login")
     public String viewIndex(Model model) {
         model.addAttribute("usuario", new Usuario());
         return "login/index";
@@ -112,5 +112,10 @@ public class UsuarioController {
     public String viewCadastro(Model model) {
         model.addAttribute("usuario", new Usuario());
         return "login/cadastro";
+    }
+
+    @GetMapping("/")
+    public String viewLandingPage() {
+        return "landing"; 
     }
 }

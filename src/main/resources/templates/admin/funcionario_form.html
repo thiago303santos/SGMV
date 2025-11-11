@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/_head :: head}"></head>
+<body class="has-navbar">
+
+<div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div>
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4 pb-2 border-bottom text-primary">
+        <i class="bi bi-person-badge-fill me-2"></i> 
+        <span th:text="${funcionario.idFuncionario == null ? 'Novo Registro de Profissional' : 'Editar Funcionário #' + funcionario.idFuncionario}"></span>
+    </h2>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <form th:action="@{/admin/funcionario/salvar}" th:object="${funcionario}" method="post" class="row g-3">
+                <input type="hidden" th:field="*{idFuncionario}" />
+                
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Nome Completo</label>
+                    <input type="text" th:field="*{nomeFuncionario}" class="form-control" required>
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Especialidade</label>
+                    <input type="text" th:field="*{especialidade}" class="form-control" placeholder="Ex: Mecânico Chefe, Eletricista" required>
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">CPF/Documento</label>
+                    <input type="text" name="documento" class="form-control" placeholder="Apenas para referência"> 
+                    </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Vincular Conta de Usuário</label>
+                    <select th:field="*{contaUsuario}" class="form-select">
+                        <option th:value="null">-- Nenhum Usuário Vinculado --</option>
+                        
+                        <option th:if="${funcionario.contaUsuario != null}" 
+                                th:value="${funcionario.contaUsuario.idUsuario}" 
+                                th:text="'Atual: ' + ${funcionario.contaUsuario.nomeUsuario}" 
+                                selected>
+                        </option>
+                        
+                        <option th:each="usuario : ${usuariosDisponiveis}"
+                                th:value="${usuario.idUsuario}"
+                                th:text="${usuario.nomeUsuario} + ' (' + ${usuario.emailUsuario} + ')'">
+                        </option>
+                    </select>
+                    <small class="text-muted">Selecione uma conta para que o profissional possa logar.</small>
+                </div>
+                
+                <div class="col-12 mt-4 text-end border-top pt-3">
+                    <a th:href="@{/admin/acesso}" class="btn btn-outline-secondary me-2">
+                        <i class="bi bi-x-lg me-1"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-success shadow">
+                        <i class="bi bi-save-fill me-1"></i> Salvar Funcionário
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/_scripts :: scripts}"></div>
+</body>
+</html>
