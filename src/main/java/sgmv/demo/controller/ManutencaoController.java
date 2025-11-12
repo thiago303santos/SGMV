@@ -21,6 +21,7 @@ import sgmv.demo.dto.ManutencaoPecaDTO;
 import sgmv.demo.dto.ManutencaoServicoDTO;
 import sgmv.demo.model.*;
 import sgmv.demo.repository.*;
+import sgmv.demo.service.PreventivaService;
 
 @Controller
 @RequestMapping("/manutencao")
@@ -44,6 +45,9 @@ public class ManutencaoController {
     private FuncionarioRepository funcionarioRepository;
     @Autowired
     private AgendamentoRepository agendamentoRepository;
+
+    @Autowired
+    private PreventivaService preventivaService;
 
     // Utilitário para buscar o Funcionario logado
     private Funcionario getFuncionarioExecutor(HttpSession session) {
@@ -285,6 +289,8 @@ public class ManutencaoController {
             .orElseGet(() -> ResponseEntity.status(404).body(Map.of("success", false, "message", "OS não encontrada.")));
     }
 
+    // src/main/java/sgmv/demo/controller/ManutencaoController.java
+
     @PostMapping("/{id}/status/finalizar")
     @ResponseBody
     public ResponseEntity<?> finalizarManutencao(@PathVariable Long id) {
@@ -294,8 +300,15 @@ public class ManutencaoController {
                 if (status.equals("EM_ANDAMENTO")) {
                     manutencao.setStatus("CONCLUIDA");
                     manutencao.setDataHoraFim(LocalDateTime.now());
-                    manutencaoRepository.save(manutencao);
-                    return ResponseEntity.ok(Map.of("success", true, "message", "Serviço finalizado."));
+                    
+                    // --- CHAVE DE GERAÇÃO DE PREVENTIVA ---
+                    manutencaoRepository.save(manutencao); // Salva o status final
+                    
+                    // Chama a lógica para gerar os próximos agendamentos
+                    preventivaService.gerarProximosAgendamentos(manutencao);
+                    // ------------------------------------
+                    
+                    return ResponseEntity.ok(Map.of("success", true, "message", "Serviço finalizado. Agendamentos preventivos gerados."));
                 }
                 return ResponseEntity.ok(Map.of("success", false, "message", "O serviço ainda não foi iniciado ou já foi finalizado."));
             })

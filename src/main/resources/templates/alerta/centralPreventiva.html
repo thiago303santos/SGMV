@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SGMV - Central de Prevenção e Alertas</title>
+    <div th:replace="~{fragments/_head :: head}"></div> 
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/datatables/css/dataTables.bootstrap5.min.css}" />
+    <style>
+        /* Estilo para destacar os cards de alerta */
+        .card-alerta {
+            border-left: 5px solid var(--bs-danger); 
+            transition: all 0.3s ease;
+            cursor: default; /* Indica que não é um link clicável */
+        }
+        .card-alerta:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+        /* Ajuste de fonte para a tabela de agendamentos */
+        .table-proximos th, .table-proximos td {
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+        /* Estilo para o badge de dias restantes */
+        .badge-dias-vencendo {
+            font-size: 0.85em;
+            padding: 0.5em 0.7em;
+            min-width: 50px; /* Mais largo para caber 'N dias' */
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="has-navbar">
+    
+    <div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${session.usuarioNome})}"></div> 
+
+    <div class="container mt-5 pt-4">
+        <h1 class="fw-bold mb-4 pb-2 border-bottom text-primary">
+            <i class="bi bi-bell-fill me-2"></i> Central de Prevenção e Alertas
+        </h1>
+        
+        <div th:if="${sucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${sucesso}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${erro}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${erro}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <section class="mb-5">
+            <h2 class="mb-4 text-danger">
+                <i class="bi bi-fire me-2"></i> Alertas Críticos Ativos
+            </h2>
+            
+            <div th:if="${#lists.isEmpty(alertasCriticos)}" class="alert alert-success border-0 shadow-sm" role="alert">
+                <h4 class="alert-heading"><i class="bi bi-check-circle-fill me-2"></i> Tudo sob controle!</h4>
+                <p class="mb-0">Não há alertas críticos pendentes no momento. Mantenha o bom trabalho de prevenção.</p>
+            </div>
+            
+            <div th:unless="${#lists.isEmpty(alertasCriticos)}" class="row row-cols-1 row-cols-md-2 g-4">
+                <div th:each="alerta : ${alertasCriticos}" class="col">
+                    <div class="card card-alerta shadow">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="card-title text-danger mb-2">
+                                    <i class="bi bi-exclamation-octagon-fill me-1"></i> <span th:text="${alerta.titulo}"></span>
+                                </h5>
+                                <span class="badge bg-danger">CRÍTICO</span>
+                            </div>
+                            
+                            <p class="card-text small" th:utext="${alerta.descricao}"></p>
+                            
+                            <small class="text-muted d-block mb-3">
+                                <i class="bi bi-clock"></i> Criado em: <span th:text="${#temporals.format(alerta.dataCriacao, 'dd/MM/yyyy HH:mm')}"></span>
+                            </small>
+                            
+                            <form th:action="@{/alertas/marcar-lido/{id}(id=${alerta.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-check-circle me-1"></i> Marcar como Lido
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </section>
+        
+        <hr class="mb-5">
+
+        <section class="mb-5">
+            <h2 class="mb-4 text-info">
+                <i class="bi bi-calendar-range me-2"></i> Próximas Manutenções Preventivas
+            </h2>
+            <p class="text-muted">Lista de todos os agendamentos preventivos futuros. Utilize o filtro por **Dias Restantes** para priorizar.</p>
+            
+            <div class="table-responsive shadow-sm">
+    <table id="tabelaAgendamentos" class="table table-striped table-hover table-proximos align-middle" style="width:100%">
+        <thead class="table-light">
+            <tr>
+                <th>ID Agend.</th>
+                <th>Veículo (Placa)</th>
+                <th>Cliente/Contato</th> <!-- Index 2 -->
+                <th>Item/Serviço</th>
+                <th data-orderable="true">Dias Restantes</th> 
+                <th>Data Prevista</th>
+                <th>KM Prevista</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 1. Desempacotamos o Map: agendamento (entity) e diasRestantes (valor calculado) -->
+            <tr th:each="agendamentoMapeado : ${agendamentosFuturos}" 
+                th:with="agendamento=${agendamentoMapeado.agendamento}, diasRestantes=${agendamentoMapeado.diasRestantes}">
+                
+                <td th:text="${agendamento.idAgendamento}">1</td> <!-- Coluna 0 -->
+                
+                <td>
+                    <!-- Coluna 1: Veículo -->
+                    <th:block th:if="${agendamento.veiculo != null}">
+                        <a th:href="@{/veiculo/{placa}(placa=${agendamento.veiculo.placa})}" class="fw-bold text-decoration-none text-primary" 
+                           th:text="${agendamento.veiculo.placa}">ABC-1234</a>
+                        <small class="text-muted d-block" th:text="${agendamento.veiculo.modelo}"></small>
+                    </th:block>
+                    <span th:unless="${agendamento.veiculo != null}">Veículo Removido</span>
+                </td>
+                
+                <td>
+                    <!-- Coluna 2: Cliente/Contato -->
+                    <th:block th:if="${agendamento.veiculo != null and agendamento.veiculo.cliente != null}">
+                        <a th:href="@{/clientes/editar/{id}(id=${agendamento.veiculo.cliente.idCliente})}" class="fw-bold text-decoration-none" 
+                           th:text="${agendamento.veiculo.cliente.nomeCliente}">Nome Cliente</a>
+                        <small class="text-muted d-block">
+                            <!-- Ícone de telefone e link tel: -->
+                            <i class="bi bi-phone me-1"></i>
+                            <a th:href="'tel:' + ${agendamento.veiculo.cliente.telefoneCliente}" class="text-decoration-none"
+                               th:text="${agendamento.veiculo.cliente.telefoneCliente}"> (99) 99999-9999</a>
+                        </small>
+                    </th:block>
+                    <span th:unless="${agendamento.veiculo != null and agendamento.veiculo.cliente != null}" class="text-danger">Cliente Não Vinculado</span>
+                </td>
+                
+                <!-- Coluna 3: Item/Serviço -->
+                <td th:text="${agendamento.regra != null ? agendamento.regra.nomeRegra : 'Regra Não Encontrada'}">ÓLEO E FILTRO DO MOTOR (TROCA)</td>
+                
+                <td>
+                    <!-- Coluna 4: Dias restantes (valor calculado em Java) -->
+                    <span th:text="${diasRestantes} + ' dias'" class="badge badge-dias-vencendo"
+                            th:classappend="${diasRestantes <= 7} ? 'bg-danger text-white' : 
+                                             (${diasRestantes <= 30} ? 'bg-warning text-dark' : 'bg-success text-white')"></span>
+                </td>
+                
+                <td th:text="${#temporals.format(agendamento.dataAgendada, 'dd/MM/yyyy')}"></td> <!-- Coluna 5: Data Prevista -->
+                
+                <!-- Coluna 6: KM Prevista -->
+                <td th:text="${agendamento.kmAgendada != null} ? ${#numbers.formatInteger(agendamento.kmAgendada, 0, 'POINT')} : '-'">-</td>
+                
+                <!-- Coluna 7: Status -->
+                <td>
+                    <span class="badge bg-secondary" th:text="${agendamento.status}">PENDENTE</span>
+                </td>
+                
+                <td>
+                    <!-- Coluna 8: Ações -->
+                    <a th:href="@{/manutencao/nova/agendamento/{id}(id=${agendamento.idAgendamento})}" 
+                       class="btn btn-sm btn-success" title="Gerar nova Ordem de Serviço com base neste agendamento">
+                        <i class="bi bi-hammer me-1"></i> Abrir OS
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="~{fragments/_scripts :: scripts}"></div>
+
+<script th:src="@{/webjars/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/webjars/datatables/js/dataTables.bootstrap5.min.js}"></script>
+
+<script>
+$(document).ready(function() {
+    $('#tabelaAgendamentos').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json" 
+        },
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false, 
+        // Desativa a ordenação para a coluna de Ações (índice 8)
+        "columnDefs": [
+            { "orderable": false, "targets": [8] }
+        ],
+        // Ordenação padrão por "Dias Restantes" (índice 4 na nova estrutura)
+        "order": [[ 4, "asc" ]] 
+    });
+});
+</script>
+</body>
+</html>

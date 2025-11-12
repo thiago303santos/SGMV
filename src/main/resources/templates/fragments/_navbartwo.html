@@ -15,11 +15,14 @@
                 </ul>
 
             <div class="d-flex align-items-center">
-                <button class="btn btn-dark position-relative me-3" aria-label="Notificações">
-                    <i class="bi bi-bell-fill"></i>
+                <a th:href="@{/alertas}"
+                class="btn btn-dark position-relative me-3" 
+                aria-label="Notificações"
+                th:title="|Você tem ${notificacoes} alertas não lidos|"> <i class="bi bi-bell-fill"></i>
+                    
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                          th:text="${notificacoes} ?: 0">0</span>
-                </button>
+                        th:text="${notificacoes} ?: 0">0</span>
+                </a>
 
                 <div class="dropdown">
                     <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"

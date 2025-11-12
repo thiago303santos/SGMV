@@ -3,7 +3,7 @@
 <head th:replace="~{fragments/_head :: head}"></head>
 <body class="has-navbar">
 
-<div th:replace="~{fragments/_navbartwo :: navbar(${notificacoes}, ${usuarioNome})}"></div> 
+<div th:replace="~{fragments/_navbar :: navbar(${notificacoes}, ${usuarioNome})}"></div> 
 
 <div class="container mt-4">
 
@@ -198,9 +198,38 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalAdicionar" tabindex="-1" aria-labelledby="modalAdicionarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formAdicionar" onsubmit="return false;">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalAdicionarLabel">Adicionar <span id="modalNomeProduto"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="modalProdutoId">
+                    <p class="mb-2">Estoque disponível: <strong id="modalEstoqueAtual">---</strong></p>
+                    <div id="modalErro" class="alert alert-danger" style="display: none;"></div>
 
-    <div class="modal fade" id="modalAdicionar" tabindex="-1" aria-hidden="true">
+                    <div class="mb-3">
+                        <label for="modalQuantidade" class="form-label">Quantidade</label>
+                        <input type="number" id="modalQuantidade" class="form-control" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modalValorUnit" class="form-label">Valor Unitário (R$)</label>
+                        <input type="number" step="0.01" id="modalValorUnit" class="form-control" min="0" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-plus-circle-fill"></i> Adicionar à OS
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
+</div>
 
 </div>
 
@@ -367,6 +396,35 @@
             ],
             dom: 'rtip'
         });
+
+        // Dentro de $(document).ready(function () { ... });
+
+// --- Evento: Abrir Modal ao Clicar em Adicionar na Tabela de Produtos ---
+$('#tabelaProdutos tbody').on('click', '.btn-add', function() {
+    const btn = $(this);
+    
+    // 1. Pega os dados do produto nos atributos data-
+    const id = btn.data('id');
+    const nome = btn.data('nome');
+    const estoque = btn.data('estoque');
+    const preco = btn.data('preco'); // Este é o valor de venda
+    
+    // 2. Preenche a modal
+    $('#modalNomeProduto').text(nome);
+    $('#modalProdutoId').val(id);
+    $('#modalEstoqueAtual').text(estoque);
+    
+    // Define valores padrão para o formulário
+    $('#modalQuantidade').val(1);
+    $('#modalValorUnit').val(preco);
+    $('#modalErro').hide(); // Esconde erros antigos
+    
+    // 3. Abre a modal
+    const modal = new bootstrap.Modal(document.getElementById('modalAdicionar'));
+    modal.show();
+});
+
+// ... (Restante dos seus eventos) ...
 
         // 2. Inicializa a TABELA DO CARRINHO
         tabelaCarrinho = $('#tabelaCarrinho').DataTable({
@@ -583,7 +641,16 @@
 
         // --- SALVAR OS FINAL ---
         $('#btnSalvarOS').on('click', function() {
-            alert('As peças e serviços foram salvos na Ordem de Serviço. Você será redirecionado para a lista.');
+            alert('As peças e serviços foram salvos na Ordem de Serviço.');
+            $.post(`/manutencao/${manutencaoId}/status/iniciar`, {})
+                .done(resp => {
+                    if (resp.success) {
+                        window.location.reload(); 
+                    } else {
+                        alert(resp.message || 'Erro ao iniciar serviço.');
+                    }
+                })
+                .fail(() => alert('Erro de comunicação com o servidor.'));
             window.location.href = '/manutencao/lista';
         });
 

@@ -41,6 +41,15 @@
         </div>
         
         <div class="col-md-4">
+            <div class="card card-funcionalidade shadow text-center border-danger" th:onclick="|window.location.href='/alertas'|">
+                <div class="card-body">
+                    <i class="bi bi-bell-fill display-6 text-danger"></i>
+                    <h5 class="card-title mt-2">Central de Alertas</h5>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
             <div class="card card-funcionalidade shadow text-center border-warning" th:onclick="|window.location.href='/estoque/lista'|">
                 <div class="card-body">
                     <i class="bi bi-boxes display-6 text-warning"></i>
@@ -49,14 +58,14 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <div class="card card-funcionalidade shadow text-center border-secondary" th:onclick="|window.location.href='/veiculos'|">
                 <div class="card-body">
                     <i class="bi bi-tools display-6 text-secondary"></i>
                     <h5 class="card-title mt-2">Gerenciar Veículos</h5>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="col-md-4">
             <div class="card card-funcionalidade shadow text-center border-info" th:onclick="|window.location.href='/clientes'|">
@@ -116,30 +125,35 @@
         </div>
     </div>
 
-    <div class="row mt-5 g-4">
+<div class="row mt-5 g-4">
+        
         <div class="col-md-6">
             <div class="card shadow h-100">
                 <div class="card-header bg-secondary text-white">
-                    <i class="bi bi-graph-up me-2"></i> Finanças - Últimos 6 meses
-                </div>
-                <div class="card-body">
-                    <canvas id="graficoOrdens"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card shadow h-100">
-                <div class="card-header bg-secondary text-white">
-                    <i class="bi bi-pie-chart-fill me-2"></i> Estoque - Itens mais usados
+                    <i class="bi bi-bar-chart-line-fill me-2"></i> Estoque - Top 5 Itens Utilizados
                 </div>
                 <div class="card-body">
                     <canvas id="graficoEstoque"></canvas>
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="card shadow h-100">
+                <div class="card-header bg-success text-white">
+                    <i class="bi bi-person-workspace me-2"></i> Produtividade Média por Funcionário
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="filtroFuncionario" class="form-label small fw-bold">Selecionar Profissional:</label>
+                        <select id="filtroFuncionario" class="form-select form-select-sm">
+                            <option value="todos">Todos os Funcionários (Visão Geral)</option>
+                            </select>
+                    </div>
+                    <canvas id="graficoProdutividade"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
-    
 </div>
 <div th:replace="~{fragments/_scripts :: scripts}"></div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -217,8 +231,8 @@
         $('#tabelaAgendamentos').DataTable({
             destroy: true,
             responsive: true,
-            ordering: false, 
-            paging: false, info: false, searching: false,
+            ordering: true, 
+            paging: false, info: false, searching: false, scrollY: '300px',
             ajax: {
                 url: "/agendamentos/listar", // Endpoint que lista todos os agendamentos
                 dataSrc: "" 
@@ -244,8 +258,8 @@
         $('#tabelaAcompanharOrdem').DataTable({
             destroy: true,
             responsive: true,
-            ordering: false,
-            paging: false, info: false, searching: false,
+            ordering: true,
+            paging: false, info: false, searching: false,scrollY: '300px',
             ajax: {
                 url: "/manutencao/lista-json", 
                 dataSrc: ""
@@ -269,47 +283,69 @@
     }
 
     // -------------------------------------------------------------
-    // GRÁFICOS INICIALIZAÇÃO
+    // GRÁFICOS DINÂMICOS (COM AJAX)
     // -------------------------------------------------------------
 
     function inicializarGraficos() {
-        // --- Gráfico de Ordens (Linha) ---
-        new Chart(document.getElementById("graficoOrdens"), {
-            type: 'line',
-            data: {
-                labels: ["Mai", "Jun", "Jul", "Ago", "Set", "Out"],
-                datasets: [{
-                    label: "Valor Total (R$)",
-                    data: [1200, 1900, 3000, 500, 2200, 1000],
-                    borderColor: "#2f6fa3",
-                    backgroundColor: "rgba(47,111,163,0.2)",
-                    fill: true,
-                    tension: 0.35
-                }]
-            },
-            options: {
-                plugins: { legend: { labels: { color: "#122027" } } },
-                scales: {
-                    x: { ticks: { color: "#5f6b75" } },
-                    y: { ticks: { color: "#5f6b75" } }
-                }
-            }
-        });
+        
+        // --- 2. GRÁFICO DE BARRAS HORIZONTAIS: ITENS MAIS USADOS ---
+        $.getJSON('/dashboard/estoque/maisusados', function(dataEstoque) {
+            const labels = dataEstoque.map(item => item.label);
+            const values = dataEstoque.map(item => item.value);
 
-        // --- Gráfico de Estoque (Rosca/Doughnut) ---
-        new Chart(document.getElementById("graficoEstoque"), {
-            type: 'doughnut',
-            data: {
-                labels: ["Óleo", "Pneu", "Filtro", "Pastilha"],
-                datasets: [{
-                    data: [30, 20, 25, 25],
-                    backgroundColor: ["#2f6fa3", "#28a745", "#ffc107", "#dc3545"]
-                }]
-            },
-            options: {
-                plugins: { legend: { labels: { color: "#122027" } } }
-            }
-        });
+            new Chart(document.getElementById("graficoEstoque"), {
+                type: 'bar', // Tipo Bar
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Quantidade Utilizada",
+                        data: values,
+                        backgroundColor: "#28a745" // Verde
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Define o gráfico como HORIZONTAL
+                    responsive: true,
+                    plugins: { 
+                        legend: { display: false },
+                        title: { display: true, text: 'Top 5 Itens Mais Utilizados' }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, title: { display: true, text: 'Total Utilizado' } }
+                    }
+                }
+            });
+        }).fail(function() { /* Fallback */ });
+
+        // --- 3. GRÁFICO DE BARRAS VERTICAIS: PRODUTIVIDADE (Por Funcionário) ---
+        // Aqui, o ideal é adicionar um SELECT no HTML para filtrar. 
+        // Vamos apenas desenhar o gráfico com dados gerais por enquanto.
+        $.getJSON('/dashboard/produtividade/tempomedio', function(dataProdutividade) {
+            const labels = dataProdutividade.map(item => item.label);
+            const values = dataProdutividade.map(item => item.value);
+
+            new Chart(document.getElementById("graficoProdutividade"), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Tempo Médio por OS (Horas)",
+                        data: values,
+                        backgroundColor: "#0dcaf0" // Azul claro
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Tempo Médio (Horas)' }
+                        }
+                    }
+                }
+            });
+        }).fail(function() { /* Fallback */ });
     }
 </script>
 </body>

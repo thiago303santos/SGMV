@@ -21,7 +21,7 @@ public class Produto implements Serializable {
     private String fabricante;
     private String codigoBarras;
     private String numeroSerie;
-
+    private int estoqueMinimo;
     private int quantidade;
 
     @NumberFormat(pattern = "#,##0.00")
@@ -57,6 +57,9 @@ public class Produto implements Serializable {
 
     public String getNumeroSerie() { return numeroSerie; }
     public void setNumeroSerie(String numeroSerie) { this.numeroSerie = numeroSerie; }
+
+    public int getEstoqueMinimo() { return estoqueMinimo; }
+    public void setEstoqueMinimo(int estoqueMinimo) { this.estoqueMinimo = estoqueMinimo; }
 
     public int getQuantidade() { return quantidade; }
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
