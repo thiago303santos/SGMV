@@ -21,20 +21,6 @@ Gerencial: Dashboard com indicadores como serviços realizados e faturamento, e 
 
 ---
 
-## 📷 Telas do Sistema
-
-*(Sugestão: Adicione aqui capturas de tela do sistema em funcionamento, como a tela de Login, Dashboard e a tela de Cadastro de OS, presentes no Capítulo 4 do TCC)*
-
-| Tela de Login | Dashboard Principal |
-| :---: | :---: |
-| *[Insira Imagem Aqui]* | *[Insira Imagem Aqui]* |
-
-| Listagem de OS | Cadastro de Veículo |
-| :---: | :---: |
-| *[Insira Imagem Aqui]* | *[Insira Imagem Aqui]* |
-
----
-
 ## 🛠️ Tecnologias Utilizadas
 
 O projeto foi desenvolvido utilizando uma arquitetura em camadas (MVC - Model-View-Controller).
@@ -59,7 +45,7 @@ O sistema usa padrão MVC com Spring: visão (Thymeleaf/HTML), controladores par
 
 ### Pré-requisitos
 
-Para rodar o projeto localmente, você precisará das seguintes ferramentas instaladas:
+Para rodar o projeto localmente, será necessário as seguintes ferramentas instaladas:
 
 * [Java JDK 17](https://www.oracle.com/java/technologies/downloads/#java17)
 * [Maven](https://maven.apache.org/)
@@ -102,10 +88,10 @@ Para rodar o projeto localmente, você precisará das seguintes ferramentas inst
 
 ## 👥 Autores
 
-Trabalho desenvolvido pelos alunos do curso de Tecnologia em Análise e Desenvolvimento de Sistemas:
+Trabalho desenvolvido pelos alunos do curso de Tecnologia em Sistemas de Informação:
 
 * **Marcos Martins da Silva**
-* **Tassio Ferreira da Silva**
+* **Nathan Faleiro Rodrigues**
 * **Thiago dos Santos**
 
 **Orientadora:** Profa. Ma. Karla Roberto Sartin
