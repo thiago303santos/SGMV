@@ -1,15 +1,10 @@
 # SGMV - Sistema de Gerenciamento de Manutenções Veiculares
 
-![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=CONCLUÍDO&color=GREEN&style=for-the-badge)
-![Badge Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)
-![Badge Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen?style=for-the-badge&logo=spring)
-![Badge MariaDB](https://img.shields.io/badge/DB-MariaDB-blue?style=for-the-badge&logo=mariadb)
-
-## 📌 Sobre o Projeto
+## Sobre o Projeto
 
 O **SGMV (Sistema de Gerenciamento de Manutenções Veiculares)** é uma plataforma web criada como Trabalho de Conclusão de Curso (TCC) no curso de Tecnologia em Sistemas de Informação. Ela gerencia manutenções de veículos em oficinas mecânicas, substituindo planilhas por controle centralizado de serviços preventivos e corretivos. O sistema inclui cadastro de clientes e veículos, controle de estoque, agendamentos e ordens de serviço (OS) com histórico de manutenções.
 
-## 🚀 Funcionalidades Principais
+## Funcionalidades Principais
 
 Acesso e administração: Login seguro, perfis para administrador e colaborador, e gestão de usuários.
 
@@ -21,7 +16,7 @@ Gerencial: Dashboard com indicadores como serviços realizados e faturamento, e 
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 O projeto foi desenvolvido utilizando uma arquitetura em camadas (MVC - Model-View-Controller).
 
@@ -35,13 +30,13 @@ Ferramentas: VS Code, Git/GitHub, BrModelo e MySQL Workbench.
 
 ---
 
-## 🏗️ Arquitetura do Sistema
+## Arquitetura do Sistema
 
 O sistema usa padrão MVC com Spring: visão (Thymeleaf/HTML), controladores para requisições, serviços para lógica de negócios, repositórios JPA para dados e entidades para o domínio.
 
 ---
 
-## 🏁 Como Executar o Projeto
+## Como Executar o Projeto
 
 ### Pré-requisitos
 
@@ -86,7 +81,7 @@ Para rodar o projeto localmente, será necessário as seguintes ferramentas inst
 
 ---
 
-## 👥 Autores
+## Autores
 
 Trabalho desenvolvido pelos alunos do curso de Tecnologia em Sistemas de Informação:
 
