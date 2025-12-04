@@ -20,13 +20,13 @@ Gerencial: Dashboard com indicadores como serviços realizados e faturamento, e 
 
 O projeto foi desenvolvido utilizando uma arquitetura em camadas (MVC - Model-View-Controller).
 
-Backend: Java 17, Spring Boot 3.x, Spring Web, JPA, Security, DevTools, OpenAPI e Maven.
+Backend: Java 17, Spring Boot 3.x, Spring Web, JPA, Spring MVC, DevTools e Maven.
 
 Frontend: HTML5, CSS3, Thymeleaf, Bootstrap 5.x, JavaScript, jQuery e DataTables.
 
 Banco de dados: MariaDB 10.6.
 
-Ferramentas: VS Code, Git/GitHub, BrModelo e MySQL Workbench.
+Ferramentas: VS Code, Git/GitHub e Heidi.
 
 ---
 
@@ -51,7 +51,7 @@ Para rodar o projeto localmente, será necessário as seguintes ferramentas inst
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/SEU-USUARIO/SGMV.git](https://github.com/SEU-USUARIO/SGMV.git)
+    git clone [https://github.com/thiago303santos/SGMV.git](https://github.com/thiago303santos/SGMV.git)
     cd SGMV
     ```
 
@@ -61,8 +61,8 @@ Para rodar o projeto localmente, será necessário as seguintes ferramentas inst
     * Atualize as credenciais de conexão conforme o seu ambiente local:
         ```properties
         spring.datasource.url=jdbc:mariadb://localhost:3306/sgmv_db?useTimezone=true&serverTimezone=UTC
-        spring.datasource.username=SEU_USUARIO_DO_BANCO
-        spring.datasource.password=SUA_SENHA_DO_BANCO
+        spring.datasource.username=USERNAME
+        spring.datasource.password=PASSWORD
         # spring.jpa.hibernate.ddl-auto=update # Descomente na primeira execução para criar as tabelas
         ```
 
