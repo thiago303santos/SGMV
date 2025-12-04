@@ -87,7 +87,7 @@ Trabalho desenvolvido pelos alunos do curso de Tecnologia em Sistemas de Informa
 
 * **Marcos Martins da Silva**
 * **Nathan Faleiro Rodrigues**
-* **Thiago dos Santos**
+* **Thiago Santos Cantanhede**
 
 **Orientadora:** Profa. Ma. Karla Roberto Sartin
 **Coordenadora:** Profa. Dra Kerlla de Souza Luz
